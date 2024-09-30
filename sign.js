@@ -9,6 +9,5 @@ function sign(num) {
 }
 
 function sameSign(a, b) {
-    if (a === 0 || b === 0)
-    return sign(a) === sign(b);
+    return sign(a) === sign(b) && a !== 0 && b !== 0;
 }
