@@ -1,3 +1,3 @@
-function concatStr(a, b) {
-    console.log(a + b)
+var concatStr = function(a, b) {
+    return a + b
 }
