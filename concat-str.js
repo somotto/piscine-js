@@ -1,3 +1,4 @@
-var concatStr = function(a, b) {
-    return a + b
+function concatStr(arg1, arg2) {
+    return arg1 + arg2;
 }
+
