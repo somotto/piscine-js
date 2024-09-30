@@ -15,9 +15,8 @@ function dogYears(planet, ageInSec) {
     const planetOrbitalPeriod = orbitalPeriods[planet]
 
     if (planetOrbitalPeriod) {
-     const dogAgeOnPlanet = ageInYrs / planetOrbitalPeriod;
+     const dogAgeOnPlanet = ageInYrs * 7 / planetOrbitalPeriod;
      
      return parseFloat(dogAgeOnPlanet.toFixed(2))
     } 
-    
 } 
