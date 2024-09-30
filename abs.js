@@ -1,5 +1,7 @@
-const isPositive = (num) => (num > 0 ? 'true' : 'false')
+function isPositive(number) {
+    return number > 0;
+}
 
-function abs(num) {
-    return num
+function abs(number) {
+    return number >= 0 ? number : -number;
 }
