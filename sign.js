@@ -1,13 +1,14 @@
-function sign(number) {
-    if (number === 0) {
-        return 0
-    } else if (number > 0) {
-    return 1
-   } else {
-    return -1
-   }
+function sign(num) {
+    if (num > 0) {
+        return 1; 
+    } else if (num < 0) {
+        return -1; 
+    } else {
+        return 0;  
+    }
 }
 
 function sameSign(a, b) {
-    return sign(a) === sign(b) && a !== 0 && b !== 0;
+    if (a === 0 || b === 0)
+    return sign(a) === sign(b);
 }
