@@ -1,6 +1,12 @@
 const getAcceleration = (params) => {
     const { f, m, Δv, Δt, t, d } = params;
 
+    if (typeof f === 'undefined' || typeof m === 'undefined' || 
+    typeof Δv === 'undefined' || typeof Δt === 'undefined' || 
+    typeof t === 'undefined' || typeof d === 'undefined') {
+    return "impossible";
+}
+
     const accelerations = [];
 
     if (m !== 0) {
