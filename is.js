@@ -2,7 +2,7 @@ is.num = function(value) {
     return typeof value === 'number';
 };
 
-is.nan = (value) => isNaN(value);
+is.nan = (value) => Number.isNaN(value);
 
 is.str = function(value) {
     return typeof value === 'string';
