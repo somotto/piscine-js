@@ -1,11 +1,11 @@
 const is = {};
 
 is.num = function(value) {
-    return typeof value === 'number' && !is.nan(value);
+    return typeof value === 'number';
 };
 
 is.nan = function(value) {
-    return typeof value === 'number' && isNaN(value);
+    return typeof value !== 'number';
 };
 
 is.str = function(value) {
@@ -28,7 +28,7 @@ is.arr = function(value) {
 };
 
 is.obj = function(value) {
-    return value !== null && typeof value === 'object';
+    return typeof value === 'object';
 };
 
 is.fun = function(value) {
