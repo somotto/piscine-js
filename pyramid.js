@@ -1,15 +1,10 @@
-const pyramid = (char, height) => {
-    let result = '';
+const pyramid = (character, height) => {
+    let result = "";
+    let spaces = " ".repeat(character.length);
     for (let i = 1; i <= height; i++) {
-      const spaces = ' '.repeat((2 * height - 1 - (2 * i - 1)) / 2);
-      const chars = char.repeat(2 * i - 1);
-      result += spaces + chars;
-      if (i < height) {
-        result += '\n';
-      }
+        result += spaces.repeat(height - i) + character.repeat(2 * i - 1) + "\n";
     }
-    return result;
-  };
-  
-//   console.log(pyramid('*', 5));
-  
+    return result.slice(0, -1);
+};
+
+// console.log(pyramid("*", 5));
