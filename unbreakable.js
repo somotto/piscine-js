@@ -1,29 +1,26 @@
-const split = (separator, str) => {
-    if (typeof separator !== 'string' || typeof str !== 'string') {
-        throw new TypeError('Both arguments must be strings');
-    }
-
-    if (separator === '') {
-        return str.split('');
-    }
-
+const split = (str, delimiter) => {
     const result = [];
-    let currentIndex = 0;
-    let nextIndex;
+    let currentSegment = '';
 
-    while ((nextIndex = str.indexOf(separator, currentIndex)) !== -1) {
-        result.push(str.slice(currentIndex, nextIndex));
-        currentIndex = nextIndex + separator.length;
+    for (let i = 0; i < str.length; i++) {
+        if (str.slice(i, i + delimiter.length) === delimiter) {
+            result.push(currentSegment);
+            currentSegment = '';
+            i += delimiter.length - 1; 
+        } else {
+            currentSegment += str[i];
+        }
     }
-    result.push(str.slice(currentIndex));
+
+    result.push(currentSegment);
     return result;
 };
-const join = (array, separator) => {
-    if (!Array.isArray(array) || typeof separator !== 'string') {
-        throw new TypeError('First argument must be an array and second argument must be a string');
+const join = (array, separator = ',') => {
+    if (!Array.isArray(array)) {
+        throw new TypeError('The first argument must be an array');
     }
     return array.reduce((acc, curr, index) => {
-        return acc + (index > 0 ? separator : '') + curr;
+        return index === 0 ? curr : acc + separator + curr;
     }, '');
 };
 
