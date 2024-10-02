@@ -1,43 +1,61 @@
-const modulo = (a, b) => {
-    if (b === 0) {
-        throw new Error("Modulo by zero");
-    }
-
-    const absA = Math.abs(a);
-    const absB = Math.abs(b);
-    let result = absA;
-
-    while (result >= absB) {
-        result -= absB;
-    }
-
-    return a < 0 ? -result : result;
-};
-
 const round = (num) => {
-    const intPart = num - modulo(num, 1);
-    const decimalPart = num - intPart;
+    let neg = num < 0;
+    if (neg) num = -num;
 
-    // For positive numbers: if decimal >= 0.5, round up; else round down
-    // For negative numbers: if decimal <= -0.5, round down; else round up
-    return (num > 0)
-        ? (decimalPart >= 0.5 ? intPart + 1 : intPart)
-        : (decimalPart <= -0.5 ? intPart - 1 : intPart);
-};
+    let count = 0;
+    while (!(num < 1 && num > -1)) {
+        num -= 1;
+        count++;
+    }
 
-const ceil = (num) => {
-    const intPart = num - modulo(num, 1);
-    return (num > intPart) ? (intPart + 1) : intPart;
+    return neg ? (num < 0.5 ? -count : -count - 1) : (num < 0.5 ? count : count + 1);
 };
 
 const floor = (num) => {
-    const intPart = num - modulo(num, 1);
-    return (num >= 0) ? intPart : (intPart - 1);
+    let neg = num < 0;
+    if (neg) num = -num;
+
+    let count = 0;
+    while (!(num < 1 && num > -1)) {
+        num -= 1;
+        count++;
+    }
+
+    return neg ? -count - 1 : count;
+};
+
+const ceil = (num) => {
+    if (!num) return 0;
+    let neg = num < 0;
+    if (neg) num = -num;
+
+    let count = 0;
+    while (!(num < 1 && num >= 0)) {
+        num -= 1;
+        count++;
+    }
+
+    return neg ? -count : count + 1;
 };
 
 const trunc = (num) => {
-    return num < 0 ? (num - modulo(num, 1) - 1) : (num - modulo(num, 1));
+    let count = 0;
+    if (num > 0xfffffffff) {
+        num -= 0xfffffffff;
+        count += 0xfffffffff;
+    }
+
+    let neg = num < 0;
+    if (neg) num = -num;
+
+    while (!(num < 1 && num > -1)) {
+        num -= 1;
+        count++;
+    }
+
+    return neg ? -count : count;
 };
+
 
 // // Usage
 // const nums = [3.7, -3.7, 3.1, -3.1];
