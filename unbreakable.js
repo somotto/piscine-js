@@ -1,5 +1,7 @@
 const split = (str, separator) => {
-    if (separator === undefined) return [str];
+    if (separator === undefined || separator === '') {
+      return Array.from(str);
+    }
     
     const result = [];
     let startIndex = 0;
@@ -8,6 +10,9 @@ const split = (str, separator) => {
     while ((foundIndex = str.indexOf(separator, startIndex)) !== -1) {
       result.push(str.slice(startIndex, foundIndex));
       startIndex = foundIndex + separator.length;
+      
+      // Safety check to prevent infinite loop
+      if (startIndex >= str.length) break;
     }
   
     result.push(str.slice(startIndex));
@@ -15,12 +20,6 @@ const split = (str, separator) => {
   };
   
   const join = (arr, separator = ',') => {
-    if (arr.length === 0) return '';
-    
-    let result = arr[0];
-    for (let i = 1; i < arr.length; i++) {
-      result += separator + arr[i];
-    }
-    
-    return result;
+    if (!Array.isArray(arr)) return '';
+    return arr.join(separator);
   };
