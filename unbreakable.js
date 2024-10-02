@@ -1,35 +1,26 @@
-const split = (str, delimiter) => {
-    if (typeof str !== 'string') {
-        throw new TypeError('The first argument must be a string');
-    }
-    if (typeof delimiter !== 'string') {
-        throw new TypeError('The second argument must be a string');
-    }
+const split = (str, separator) => {
+    if (separator === undefined) return [str];
+    
     const result = [];
-    let currentSegment = '';
-
-    for (let i = 0; i < str.length; i++) {
-        if (str.slice(i, i + delimiter.length) === delimiter) {
-            result.push(currentSegment);
-            currentSegment = '';
-            i += delimiter.length - 1; 
-        } else {
-            currentSegment += str[i];
-        }
+    let startIndex = 0;
+    let foundIndex;
+  
+    while ((foundIndex = str.indexOf(separator, startIndex)) !== -1) {
+      result.push(str.slice(startIndex, foundIndex));
+      startIndex = foundIndex + separator.length;
     }
-
-    result.push(currentSegment);
+  
+    result.push(str.slice(startIndex));
     return result;
-};
-const join = (array, separator = ',') => {
-    if (!Array.isArray(array)) {
-        throw new TypeError('The first argument must be an array');
+  };
+  
+  const join = (arr, separator = ',') => {
+    if (arr.length === 0) return '';
+    
+    let result = arr[0];
+    for (let i = 1; i < arr.length; i++) {
+      result += separator + arr[i];
     }
-    if (typeof separator !== 'string') {
-        throw new TypeError('The separator must be a string');
-    }
-    return array.reduce((acc, curr, index) => {
-        return index === 0 ? curr : acc + separator + curr;
-    }, '');
-};
-
+    
+    return result;
+  };
