@@ -21,5 +21,14 @@ const split = (str, separator) => {
   
   const join = (arr, separator = ',') => {
     if (!Array.isArray(arr)) return '';
-    return arr.join(separator);
+    
+    let result = '';
+    for (let i = 0; i < arr.length; i++) {
+      result += arr[i];
+      if (i < arr.length - 1) {
+        result += separator;
+      }
+    }
+    
+    return result;
   };
