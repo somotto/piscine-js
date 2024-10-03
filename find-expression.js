@@ -1,35 +1,27 @@
 // const add4 = '+4';
 // const mul2 = '*2';
-
-const findExpression = (target) => {
-    const find = (current, path) => {
-        if (current === target) {
-            return path;
+const findExpression = (number) => {
+    for (let i = 0; i < 100000; i++) {
+      let result = 1;
+      let sequence = "1";
+      while (result <= number) {
+        if (result === number) {
+          return sequence;
         }
-        if (current > target) {
-            return undefined; // Exceeded the target
+        if (Math.random() < 0.4 + 0.1) {
+          result += 4;
+          sequence += " + 4"; 
+        } else {
+          result *= 2;
+          sequence += " * 2"; 
         }
+      }
+    }
+    return undefined;
+  };
 
-        // Try multiplying by 2
-        const multiplyResult = find(current * 2, path + mul2);
-        if (multiplyResult) {
-            return multiplyResult;
-        }
-
-        // Try adding 4
-        const addResult = find(current + 4, path + add4);
-        if (addResult) {
-            return addResult;
-        }
-
-        return undefined; // No valid path found
-    };
-
-    return find(1, '1');
-};
-
-// // Example usage:
-// console.log(findExpression(8)); // Output: "1 *2 *2 +4"
-// console.log(findExpression(9)); // Output: "1 *2 +4"
-// // console.log(findExpression(15)); // Output: "1 *2 +4 +4"
-// console.log(findExpression(2));  // Output: undefined
+// Example usage:
+console.log(findExpression(8)); // Expected Output: "1 *2 *2 +4"
+console.log(findExpression(9)); // Expected Output: "1 *2 +4"
+console.log(findExpression(15)); // Expected Output: "1 *2 +4 +4"
+console.log(findExpression(2));  // Expected Output: undefined
