@@ -20,8 +20,8 @@ const findExpression = (number) => {
     return undefined;
   };
 
-// Example usage:
-console.log(findExpression(8)); // Expected Output: "1 *2 *2 +4"
-console.log(findExpression(9)); // Expected Output: "1 *2 +4"
-console.log(findExpression(15)); // Expected Output: "1 *2 +4 +4"
-console.log(findExpression(2));  // Expected Output: undefined
+// // Example usage:
+// console.log(findExpression(8)); // Expected Output: "1 *2 *2 +4"
+// console.log(findExpression(9)); // Expected Output: "1 *2 +4"
+// console.log(findExpression(15)); // Expected Output: "1 *2 +4 +4"
+// console.log(findExpression(2));  // Expected Output: undefined
