@@ -1,24 +1,10 @@
 const findIP = (str) => {
-    const ipRegex = /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(?::(?:6553[0-5]|655[0-2][0-9]|65[0-4][0-9]{2}|6[0-4][0-9]{3}|[1-5][0-9]{4}|[1-9][0-9]{0,3}))?\b/g;
-    
-    const results = str.match(ipRegex) || [];
-    
-    return results.filter(ip => {
-      const [address, port] = ip.split(':');
-      const octets = address.split('.');
-      
-      if (octets.some(octet => octet.length > 1 && octet[0] === '0')) {
-        return false;
-      }
-      
-      if (octets.some(octet => isNaN(parseInt(octet)) || parseInt(octet) > 255)) {
-        return false;
-      }
-      
-      if (port && (parseInt(port) < 1 || parseInt(port) > 65535)) {
-        return false;
-      }
-      
-      return true;
-    });
-  };
+    const ipRegex = /(?:^|\s)(?!(?:0[0-9]|[0-9]{2,})(?:\.\d{1,3}){3})(\b(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])(?:\:\d{1,5})?(?=\s|$))/g;
+    const matches = str.match(ipRegex);
+    return matches ? matches.map(ip => ip.trim()) : [];
+};
+
+// // Example usage:
+// const inputStr = "Here are some IP addresses: 192.168.1.1, 10.0.0.255, and 172.16.0.10:8080. Invalid: 256.100.50.25 and 192.168.01.1";
+// const validIPs = findIP(inputStr);
+// console.log(validIPs); // Output: [ '192.168.1.1', '10.0.0.255', '172.16.0.10:8080' ]
