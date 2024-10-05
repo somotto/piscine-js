@@ -9,7 +9,7 @@ const greedyQuery = (dataSet) => {
 };
   
 const notSoGreedy = (dataSet) => {
-    const notSoGreedyRegex = /(https?:\/\/[^\s]+\?[^&\s]+(&[^&\s]+){1,2})(?!&)/g;
+    const notSoGreedyRegex =/https?:\/\/[^\s?]+\?([^=&\s]+=[^&\s]+)(&[^=&\s]+=[^&\s]+){1,2}(?!&)/g 
     return dataSet.match(notSoGreedyRegex) || [];
 };
   
