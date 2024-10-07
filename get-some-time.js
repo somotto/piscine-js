@@ -1,28 +1,31 @@
-const firstDayWeek = (weekNumber, yearString) => {
-    const year = parseInt(yearString, 10);
+function firstDayWeek(week, yearStr) {
+    const year = parseInt(yearStr, 10);
+    if (week < 1 || week > 53) {
+        return "Invalid week number";
+    }
+    const firstOfYear = new Date(year, 0, 1);
+    let firstMonday = new Date(firstOfYear);
     
-    const januaryFirst = new Date(year, 0, 1); 
+    if (firstOfYear.getDay() !== 1) { 
+        const daysUntilMonday = (8 - firstOfYear.getDay()) % 7;
+        firstMonday.setDate(firstOfYear.getDate() + daysUntilMonday);
+    }
 
-    const dayOfWeek = januaryFirst.getDay(); 
-    const daysToFirstMonday = (dayOfWeek === 0) ? 1 : (8 - dayOfWeek); 
-    const firstMonday = new Date(januaryFirst);
-    firstMonday.setDate(januaryFirst.getDate() + daysToFirstMonday);
-    
     const firstDayOfWeek = new Date(firstMonday);
-    firstDayOfWeek.setDate(firstMonday.getDate() + (weekNumber - 1) * 7);
+    firstDayOfWeek.setDate(firstMonday.getDate() + (week - 1) * 7);
     
-   
-    if (weekNumber === 1 && firstDayOfWeek < januaryFirst) {
-        return `01-01-${year}`;
+    if (firstDayOfWeek < firstOfYear && week > 1) {
+        return firstOfYear.toLocaleDateString("en-GB"); 
     }
     
-    const dd = String(firstDayOfWeek.getDate()).padStart(2, '0');
-    const mm = String(firstDayOfWeek.getMonth() + 1).padStart(2, '0'); 
-    const yyyy = firstDayOfWeek.getFullYear();
+    const day = String(firstDayOfWeek.getDate()).padStart(2, '0');
+    const month = String(firstDayOfWeek.getMonth() + 1).padStart(2, '0'); 
+    const formattedDate = `${day}-${month}-${year}`;
     
-    return `${dd}-${mm}-${yyyy}`;
-};
+    return formattedDate;
+}
 
-// console.log(firstDayWeek(1, "1000")); 
-// console.log(firstDayWeek(1, "2023"));  
+// console.log(firstDayWeek(1, "2023")); 
 // console.log(firstDayWeek(53, "2023")); 
+// console.log(firstDayWeek(1, "2022")); 
+// console.log(firstDayWeek(52, "2022")); 
