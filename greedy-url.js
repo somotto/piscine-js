@@ -9,8 +9,18 @@ const greedyQuery = (dataSet) => {
 };
   
 const notSoGreedy = (dataSet) => {
-    const notSoGreedyRegex = /(https?:\/\/[^\s]+\?[^&\s]+(&[^&\s]+){1,2})(?!&)/g;
-    return dataSet.match(notSoGreedyRegex) || [];
+    const urlPattern = /https?:\/\/[^\s]+(?:\?[^\s#]*)?/g;
+    
+    const urls = dataSet.match(urlPattern) || [];
+    
+    return urls.filter(url => {
+        const queryString = url.split('?')[1];
+        if (queryString) {
+            const params = queryString.split('&');
+            return params.length >= 2 && params.length <= 3;
+        }
+        return false;
+    });
 };
   
   
