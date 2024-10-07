@@ -2,18 +2,21 @@ function firstDayWeek(weekNumber, year) {
     const yearInt = parseInt(year, 10);
 
     const firstDayOfYear = new Date(yearInt, 0, 1);
-
-    const firstMondayOfYear = firstDayOfYear.getDay() === 1 ? firstDayOfYear : new Date(firstDayOfYear.setDate(firstDayOfYear.getDate() + (8 - firstDayOfYear.getDay()) % 7));
-
-    const firstDayOfWeek = new Date(firstMondayOfYear);
-    firstDayOfWeek.setDate(firstMondayOfYear.getDate() + (weekNumber - 1) * 7);
+    let firstMondayOfYear = new Date(firstDayOfYear);
     
-    if (weekNumber > 53 && firstDayOfWeek.getFullYear() === yearInt) {
-        return formatDate(firstDayOfWeek);
+    if (firstMondayOfYear.getDay() !== 1) { 
+        const daysUntilMonday = (1 + 7 - firstMondayOfYear.getDay()) % 7; 
+        firstMondayOfYear.setDate(firstMondayOfYear.getDate() + daysUntilMonday);
     }
 
-    const formattedDate = formatDate(firstDayOfWeek);
-    return formattedDate;
+    const firstDayOfRequestedWeek = new Date(firstMondayOfYear);
+    firstDayOfRequestedWeek.setDate(firstMondayOfYear.getDate() + (weekNumber - 1) * 7);
+
+    if (firstDayOfRequestedWeek < firstDayOfYear) {
+        return formatDate(firstDayOfYear);
+    }
+
+    return formatDate(firstDayOfRequestedWeek);
 }
 
 function formatDate(date) {
@@ -24,7 +27,8 @@ function formatDate(date) {
 }
 
 // Example Usage
-// console.log(firstDayWeek(1, '2023')); // Output: "02-01-2023" (first Monday of 2023)
-// console.log(firstDayWeek(2, '2023')); // Output: "09-01-2023"
-// console.log(firstDayWeek(53, '2023')); // Output: "25-12-2023"
-// console.log(firstDayWeek(54, '2023')); // Output: "01-01-2024" (the following year)
+// console.log(firstDayWeek(1, '1000')); 
+// console.log(firstDayWeek(1, '2023')); 
+// console.log(firstDayWeek(2, '2023')); 
+// console.log(firstDayWeek(53, '2023')); 
+// console.log(firstDayWeek(54, '2023')); 
