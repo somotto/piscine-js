@@ -1,28 +1,29 @@
-const firstDayWeek = (week, year) => {
+function firstDayWeek(week, year) {
 
-    const firstJan = new Date(`${year}-01-01`);
+    year = parseInt(year);
 
-    let dayOfWeek = firstJan.getDay();
 
-    const dayOffset = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;
+    let jan1 = new Date(year, 0, 1);
 
-    const firstMonday = new Date(firstJan);
-    firstMonday.setDate(firstJan.getDate() - dayOffset);
+    let jan1Day = jan1.getDay();
 
-    const firstDayOfWeek = new Date(firstMonday);
-    firstDayOfWeek.setDate(firstMonday.getDate() + (week - 1) * 7);
+    let firstMonday = new Date(year, 0, 1 + (jan1Day === 0 ? 1 : 8 - jan1Day));
 
-    if (firstDayOfWeek.getFullYear() < year) {
-        return `01-01-${year.padStart(4,'0')}`;
+    let targetDate = new Date(firstMonday);
+    targetDate.setDate(firstMonday.getDate() + (week - 1) * 7);
+
+    if (targetDate.getFullYear() < year) {
+        targetDate = new Date(year, 0, 1);
     }
 
-    const day = String(firstDayOfWeek.getDate()).padStart(2, '0');
-    const month = String(firstDayOfWeek.getMonth() + 1).padStart(2, '0');
-    const resultYear = firstDayOfWeek.getFullYear(4, '0');
+    let dd = String(targetDate.getDate()).padStart(2, '0');
+    let mm = String(targetDate.getMonth() + 1).padStart(2, '0');
+    let yyyy = targetDate.getFullYear();
 
-    return `${day}-${month}-${resultYear}`;
-};
+    return `${dd}-${mm}-${yyyy}`;
+}
 
 // // Example usage:
-// console.log(firstDayWeek(1, "2024"));
-// console.log(firstDayWeek(10, "2023"));
+// console.log(firstDayWeek(1, "2023"));  
+// console.log(firstDayWeek(52, "2023"));
+// console.log(firstDayWeek(1, "2024"));  
