@@ -21,9 +21,12 @@ function fahrenheitToCelsius(arr) {
 function trimTemp(arr) {
     return arr.map(obj => ({
         city: obj.city,
+        state: obj.state,
+        region: obj.region,
         temperature: obj.temperature.trim().replace(/\s+/g, '')
     }));
 }
+
 
 
 function tempForecasts(arr) {
