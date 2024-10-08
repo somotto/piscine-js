@@ -1,19 +1,25 @@
 function dayOfTheYear(date) {
-   
     const year = date.getFullYear();
+    const month = date.getMonth(); 
+    const day = date.getDate();
 
-    const startOfYear = new Date(year, 0, 1); 
+    const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
-    if (year < 1) {
-        return null;
+    const isLeapYear = (year) => {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
+    };
+
+    if (isLeapYear(year)) {
+        daysInMonth[1] = 29;
     }
 
-    const diffInMillis = date - startOfYear;
+    let totalDays = day; 
+    for (let i = 0; i < month; i++) {
+        totalDays += daysInMonth[i]; 
+    }
 
-    const daysSinceStartOfYear = Math.floor(diffInMillis / (1000 * 60 * 60 * 24));
-
-    return daysSinceStartOfYear + 1;
+    return totalDays; 
 }
 
-// const date = new Date("2024-10-08");
-// console.log(dayOfTheYear(date)); 
+// console.log(dayOfTheYear(new Date('2024-10-08'))); 
+// console.log(dayOfTheYear(new Date('0001-01-01'))); 
