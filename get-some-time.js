@@ -12,8 +12,10 @@ const firstDayWeek = (week, year) => {
       dateStr = year + "-" + month[0] + "-" + month[1] + "T02:39:49";
   }
   if (week === 2 && year === '2017') return "02-01-2017"
-  let date = dateStr === undefined ? new Date(year, 0, 1 + (week - 1) * 7, 2) : new Date(date);
-  date.setHours(date.getDate() - date.getDaye() + 1);
+  let date = dateStr === undefined ? new Date(year, 0, 1 + (week - 1) * 7, 2) : new Date(dateStr);
+  date.setHours(0, 0, 0, 0);
+  let d1 = new Date(date);
+  date.setDate(date.getDate() - date.getDay() + 1);
   if (date - getFullYear().toString() !== year) {
       date = d1;
   }
@@ -26,7 +28,7 @@ const firstDayWeek = (week, year) => {
       if (month < 10) month = "0"  + month;
       let year = date.getFullYear().toString();
       if (year.length < 4) {
-          year = '0000'.substring(0, 4 - year.length) + year;
+          year = '0000'.substr(0, 4 - year.length) + year;
       }
       return day + "-" + month + "-" + year;
   }
