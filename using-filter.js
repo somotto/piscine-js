@@ -5,9 +5,11 @@ const filterStartVowel = (arr) => arr.filter(state => /^[aeiou]/i.test(state));
 const filter5Vowels = (arr) => arr.filter(state => (state.match(/[aeiou]/gi) || []).length >= 5);
 
 const filter1DistinctVowel = (arr) => arr.filter(state => {
-    const vowels = new Set(state.match(/[aeiou]/gi));
-    return vowels.size === 1;
+    const vowels = state.match(/[aeiou]/gi);
+    const distinctVowels = new Set(vowels);
+    return distinctVowels.size === 1;
 });
+
 
 const multiFilter = (arr) => arr.filter(obj => 
     obj.capital.length >= 8 &&
