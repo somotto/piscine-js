@@ -12,6 +12,7 @@ const filter1DistinctVowel = (arr) => arr.filter(state => {
 });
 
 
+
 const multiFilter = (arr) => arr.filter(obj => 
     obj.capital.length >= 8 &&
     !/^[aeiou]/i.test(obj.name) &&
