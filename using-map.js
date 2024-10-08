@@ -27,15 +27,15 @@ function trimTemp(arr) {
     }));
 }
 
-
-
 function tempForecasts(arr) {
     return arr.map(obj => {
         const fahrenheit = parseInt(obj.temperature); 
         const celsius = Math.floor((fahrenheit - 32) * 5 / 9);
-        return `${celsius}°Celsius in ${obj.city}, ${obj.state.charAt(0).toUpperCase() + obj.state.slice(1)}`;
+        const capitalizedState = obj.state.charAt(0).toUpperCase() + obj.state.slice(1).toLowerCase();
+        return `${celsius}°Celsius in ${obj.city}, ${capitalizedState}`;
     });
 }
+
 
 
 // console.log(citiesOnly([
