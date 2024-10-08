@@ -31,10 +31,13 @@ function tempForecasts(arr) {
     return arr.map(obj => {
         const fahrenheit = parseInt(obj.temperature); 
         const celsius = Math.floor((fahrenheit - 32) * 5 / 9);
-        const capitalizedState = obj.state.charAt(0).toUpperCase() + obj.state.slice(1).toLowerCase();
+        const capitalizedState = obj.state.split(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+            .join(' ');
         return `${celsius}°Celsius in ${obj.city}, ${capitalizedState}`;
     });
 }
+
 
 
 
