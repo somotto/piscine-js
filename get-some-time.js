@@ -1,28 +1,25 @@
-const firstDayWeek = (week, year) => {
-
-    const firstJan = new Date(`${year}-01-01`);
-
-    let dayOfWeek = firstJan.getDay();
-
-    const dayOffset = (dayOfWeek === 0) ? 6 : dayOfWeek - 1;
-
-    const firstMonday = new Date(firstJan);
-    firstMonday.setDate(firstJan.getDate() - dayOffset);
-
-    const firstDayOfWeek = new Date(firstMonday);
-    firstDayOfWeek.setDate(firstMonday.getDate() + (week - 1) * 7);
-
-    if (firstDayOfWeek.getFullYear() < year) {
-        return `01-01-${year.padStart(4,'0')}`;
+function firstDayWeek(week, year) {
+    if (week < 1 || week > 53 || !/^\d{4}$/.test(year)) {
+      throw new Error('Invalid input');
     }
-
-    const day = String(firstDayOfWeek.getDate()).padStart(2, '0');
-    const month = String(firstDayOfWeek.getMonth() + 1).padStart(2, '0');
-    const resultYear = firstDayOfWeek.getFullYear(4, '0');
-
-    return `${day}-${month}-${resultYear}`;
-};
-
-// // Example usage:
-// console.log(firstDayWeek(1, "2024"));
-// console.log(firstDayWeek(10, "2023"));
+  
+    const firstDay = new Date(year, 0, 1);
+    
+    const dayOffset = (8 - firstDay.getDay()) % 7;
+    const firstWeekStart = new Date(year, 0, 1 + dayOffset);
+    
+    const requestedDate = new Date(firstWeekStart.getTime() + (week - 1) * 7 * 24 * 60 * 60 * 1000);
+    
+    if (requestedDate.getFullYear() < parseInt(year)) {
+      return formatDate(new Date(year, 0, 1));
+    }
+    
+    return formatDate(requestedDate);
+  }
+  
+  function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
