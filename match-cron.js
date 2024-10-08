@@ -1,29 +1,36 @@
 function matchCron(cron, date) {
-    const [cronMinute, cronHour, cronDayOfMonth, cronMonth, cronDayOfWeek] = cron.split(' ');
-
-    const minute = date.getUTCMinutes();
-    const hour = date.getUTCHours();
-    const dayOfMonth = date.getUTCDate();
-    const month = date.getUTCMonth() + 1;
-    const dayOfWeek = (date.getUTCDay() + 1) % 7 || 7;
-    const matches = (cronPart, value) => {
-        if (cronPart === '*') {
-            return true;
-        }
-        return cronPart == value;
-    };
-    const dayOfMonthMatches = matches(cronDayOfMonth, dayOfMonth);
+    const cronParts = cron.split(' ');
+    if (cronParts.length !== 5) {
+      throw new Error('Invalid cron format');
+    }
+  
+    const [cronMinute, cronHour, cronDayOfMonth, cronMonth, cronDayOfWeek] = cronParts;
+  
+    const dateMinute = date.getMinutes();
+    const dateHour = date.getHours();
+    const dateDayOfMonth = date.getDate();
+    const dateMonth = date.getMonth() + 1; 
+    let dateDayOfWeek = date.getDay();
+    if (dateDayOfWeek === 0) dateDayOfWeek = 7;
+  
+    function matchField(cronField, dateValue) {
+      if (cronField === '*') {
+        return true; 
+      }
+      return parseInt(cronField) === dateValue;
+    }
 
     return (
-        matches(cronMinute, minute) &&
-        matches(cronHour, hour) &&
-        (dayOfMonthMatches || matches(cronDayOfWeek, dayOfWeek)) &&
-        matches(cronMonth, month) &&
-        matches(cronDayOfWeek, dayOfWeek)
+      matchField(cronMinute, dateMinute) &&
+      matchField(cronHour, dateHour) &&
+      matchField(cronDayOfMonth, dateDayOfMonth) &&
+      matchField(cronMonth, dateMonth) &&
+      matchField(cronDayOfWeek, dateDayOfWeek)
     );
-}
-
-// Example usage
-// console.log(matchCron('9 * * * *', new Date('2020-05-30T18:09:00Z'))); 
-// console.log(matchCron('9 * * * *', new Date('2020-05-30T19:09:00Z'))); 
-// console.log(matchCron('9 * * * *', new Date('2020-05-30T19:21:00Z')));
+  }
+  
+//   // Test examples
+//   console.log(matchCron('9 * * * *', new Date('2020-05-30T18:09:00'))); // -> true
+//   console.log(matchCron('9 * * * *', new Date('2020-05-30T19:09:00'))); // -> true
+//   console.log(matchCron('9 * * * *', new Date('2020-05-30T19:21:00'))); // -> false
+  
