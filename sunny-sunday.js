@@ -1,5 +1,5 @@
 function sunnySunday(date) {
-    const referenceDate = new Date(1, 0, 1); 
+    const referenceDate = new Date('0001-01-01'); 
     const millisecondsInADay = 24 * 60 * 60 * 1000;
 
     const daysSinceReference = Math.floor((date - referenceDate) / millisecondsInADay);
@@ -11,4 +11,4 @@ function sunnySunday(date) {
     return weekdays[dayIndex];
 }
 
-// console.log(sunnySunday(new Date('2024-10-08'))); 
+console.log(sunnySunday(new Date('0001-01-02'))); 
