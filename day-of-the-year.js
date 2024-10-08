@@ -1,11 +1,12 @@
 function dayOfTheYear(date) {
-    if (!(date instanceof Date)) {
-        throw new Error("Invalid input: must be a Date object");
-    }
-
+   
     const year = date.getFullYear();
 
     const startOfYear = new Date(year, 0, 1); 
+
+    if (year < 1) {
+        return null;
+    }
 
     const diffInMillis = date - startOfYear;
 
@@ -14,5 +15,5 @@ function dayOfTheYear(date) {
     return daysSinceStartOfYear + 1;
 }
 
-const date = new Date("2024-10-08");
-console.log(dayOfTheYear(date)); 
+// const date = new Date("2024-10-08");
+// console.log(dayOfTheYear(date)); 
