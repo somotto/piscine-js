@@ -4,19 +4,20 @@ function matchCron(cron, date) {
     const minute = date.getUTCMinutes();
     const hour = date.getUTCHours();
     const dayOfMonth = date.getUTCDate();
-    const month = date.getUTCMonth() + 1; 
-    const dayOfWeek = (date.getUTCDay() + 1) % 7 || 7; 
+    const month = date.getUTCMonth() + 1;
+    const dayOfWeek = (date.getUTCDay() + 1) % 7 || 7;
     const matches = (cronPart, value) => {
         if (cronPart === '*') {
-            return true; 
+            return true;
         }
-        return cronPart == value; 
+        return cronPart == value;
     };
+    const dayOfMonthMatches = matches(cronDayOfMonth, dayOfMonth);
 
     return (
         matches(cronMinute, minute) &&
         matches(cronHour, hour) &&
-        matches(cronDayOfMonth, dayOfMonth) &&
+        (dayOfMonthMatches || matches(cronDayOfWeek, dayOfWeek)) &&
         matches(cronMonth, month) &&
         matches(cronDayOfWeek, dayOfWeek)
     );
