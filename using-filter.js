@@ -6,6 +6,7 @@ const filter5Vowels = (arr) => arr.filter(state => (state.match(/[aeiou]/gi) || 
 
 const filter1DistinctVowel = (arr) => arr.filter(state => {
     const vowels = state.match(/[aeiou]/gi);
+    if (!vowels) return false;
     const distinctVowels = new Set(vowels);
     return distinctVowels.size === 1;
 });
