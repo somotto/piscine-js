@@ -5,11 +5,10 @@ const filterStartVowel = (arr) => arr.filter(state => /^[aeiou]/i.test(state));
 const filter5Vowels = (arr) => arr.filter(state => (state.match(/[aeiou]/gi) || []).length >= 5);
 
 const filter1DistinctVowel = (arr) => arr.filter(state => {
-    const vowels = state.match(/[aeiou]/gi);
-    if (!vowels) return false;
-    const distinctVowels = new Set(vowels);
-    return distinctVowels.size === 1;
-});
+    const lowercaseState = state.toLowerCase();
+    const vowels = new Set(lowercaseState.match(/[aeiou]/g) || []);
+    return vowels.size === 1;
+  });
 
 
 
