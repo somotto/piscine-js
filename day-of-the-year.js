@@ -1,6 +1,6 @@
 function dayOfTheYear(date) {
     const year = date.getFullYear();
-    const month = date.getMonth(); 
+    const month = date.getMonth();
     const day = date.getDate();
 
     const daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -13,12 +13,12 @@ function dayOfTheYear(date) {
         daysInMonth[1] = 29;
     }
 
-    let totalDays = day; 
+    let totalDays = day;
     for (let i = 0; i < month; i++) {
-        totalDays += daysInMonth[i]; 
+        totalDays += daysInMonth[i];
     }
 
-    return totalDays; 
+    return totalDays;
 }
 
 // console.log(dayOfTheYear(new Date('2024-10-08'))); 

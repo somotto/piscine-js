@@ -2,7 +2,7 @@ function format(date, formatString) {
     const pad = (num, size) => String(num).padStart(size, '0');
 
     const year = date.getFullYear();
-    const month = date.getMonth(); 
+    const month = date.getMonth();
     const day = date.getDate();
     const weekday = date.toLocaleDateString('en-US', { weekday: 'long' });
     const shortWeekday = date.toLocaleDateString('en-US', { weekday: 'short' });
@@ -10,7 +10,7 @@ function format(date, formatString) {
     const hours12 = hours24 % 12 || 12;
     const minutes = date.getMinutes();
     const seconds = date.getSeconds();
-    const era = year >= 0 ? 'AD' : 'BC'; 
+    const era = year >= 0 ? 'AD' : 'BC';
     const monthNames = [
         'January', 'February', 'March', 'April', 'May', 'June',
         'July', 'August', 'September', 'October', 'November', 'December'

@@ -3,16 +3,16 @@ function citiesOnly(arr) {
 }
 
 function upperCasingStates(arr) {
-    return arr.map(state => 
+    return arr.map(state =>
         state.split(' ')
-             .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-             .join(' ')
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ')
     );
 }
 
 function fahrenheitToCelsius(arr) {
     return arr.map(temp => {
-        const fahrenheit = parseInt(temp); 
+        const fahrenheit = parseInt(temp);
         const celsius = Math.floor((fahrenheit - 32) * 5 / 9);
         return `${celsius}°C`;
     });
@@ -29,7 +29,7 @@ function trimTemp(arr) {
 
 function tempForecasts(arr) {
     return arr.map(obj => {
-        const fahrenheit = parseInt(obj.temperature); 
+        const fahrenheit = parseInt(obj.temperature);
         const celsius = Math.floor((fahrenheit - 32) * 5 / 9);
         const capitalizedState = obj.state.split(' ')
             .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())

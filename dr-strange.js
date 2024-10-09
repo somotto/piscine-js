@@ -11,7 +11,7 @@ function addWeek(date) {
         'secondMonday', 'secondTuesday', 'secondWednesday', 'secondThursday', 'secondFriday', 'secondSaturday', 'secondSunday'
     ];
 
-   
+
     return days[dayOfWeek];
 }
 
