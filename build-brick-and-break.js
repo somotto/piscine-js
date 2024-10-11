@@ -4,6 +4,11 @@ function build(numberOfBricks) {
     let brickCount = 0;
     const tower = document.querySelector('.tower');
 
+    if (!tower) {
+        console.error("Tower element not found");
+        return;
+    }
+
     brickInterval = setInterval(() => {
         if (brickCount < numberOfBricks) {
             const brick = document.createElement('div');
@@ -37,17 +42,16 @@ function repair(...ids) {
 
 function destroy() {
     const tower = document.querySelector('.tower');
-    const lastBrick = tower.lastElementChild;
-    if (lastBrick) {
-        lastBrick.remove();
+    if (tower) {
+        const lastBrick = tower.lastElementChild;
+        if (lastBrick) {
+            lastBrick.remove();
+        }
     }
 }
 
-document.querySelector('.tools').addEventListener('click', (event) => {
-    if (event.target.textContent === '🔨') {
-        repair('brick-1', 'brick-2', 'brick-3');
-    } else if (event.target.textContent === '🧨') {
-        destroy();
-    }
-});
-build(15);
+window.build = build;
+window.repair = repair;
+window.destroy = destroy;
+
+build(30);
