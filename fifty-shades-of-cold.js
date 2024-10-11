@@ -1,31 +1,39 @@
-import { colors } from './fifty-shades-of-cold.data.js';
+import { colors } from './fifty-shades-of-cold.data.js'
 
 export function generateClasses() {
-  const style = document.createElement('style');
-  document.head.appendChild(style);
+    const style = document.createElement('style')
+    let styleContent = ''
 
-  colors.forEach(color => {
-    style.sheet.insertRule(`.${color} { background: ${color}; }`, 0);
-  });
+    colors.forEach(color => {
+        styleContent += `.${color} { background: ${color}; }\n`
+    })
+
+    style.textContent = styleContent
+    document.head.appendChild(style)
 }
 
 export function generateColdShades() {
-  const coldShades = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'];
-  const container = document.body;
+    const coldColors = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple']
+    const container = document.createElement('div')
+    container.style.display = 'flex'
+    container.style.flexWrap = 'wrap'
+    container.style.justifyContent = 'center'
 
-  colors.forEach(color => {
-    if (coldShades.some(shade => color.includes(shade))) {
-      const div = document.createElement('div');
-      div.className = color;
-      div.textContent = color;
-      container.appendChild(div);
-    }
-  });
+    colors.forEach(color => {
+        if (coldColors.some(coldColor => color.includes(coldColor))) {
+            const div = document.createElement('div')
+            div.className = color
+            div.textContent = color
+            container.appendChild(div)
+        }
+    })
+
+    document.body.appendChild(container)
 }
 
-export function choseShade(color) {
-  const divs = document.querySelectorAll('div');
-  divs.forEach(div => {
-    div.className = color;  
-  });
+export function choseShade(shade) {
+    const divs = document.querySelectorAll('div')
+    divs.forEach(div => {
+        div.className = shade
+    })
 }
