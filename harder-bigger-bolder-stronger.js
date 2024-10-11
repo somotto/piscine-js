@@ -7,7 +7,7 @@ export function generateLetters() {
         const letterDiv = document.createElement('div');
         const randomLetter = letters[Math.floor(Math.random() * letters.length)];
 
-        const fontSize = 11 + (i * (130 - 11) / totalLetters);
+        const fontSize = 11 + Math.round((i / (totalLetters - 1)) * (130 - 11));
         let fontWeight;
 
         if (i < totalLetters / 3) {
