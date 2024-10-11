@@ -1,49 +1,38 @@
-function build(numberOfBricks) {
-    let brickCount = 0;
-    const tower = document.body;  
+let brickCount = 0;
 
-    function addBrick() {
-        if (brickCount < numberOfBricks) {
-            const brick = document.createElement('div');
-            brick.id = `brick-${brickCount + 1}`;
-            brick.classList.add('brick');
-
-            if ((brickCount % 3) === 1) {
-                brick.dataset.foundation = 'true';
-            }
-
-            tower.appendChild(brick);
+export function build(amount) {
+    const interval = setInterval(() => {
+        if (brickCount < amount) {
             brickCount++;
-
-            setTimeout(addBrick, 100);  
+            const brick = document.createElement('div');
+            brick.id = `brick-${brickCount}`;
+            if (brickCount % 3 === 2) {
+                brick.setAttribute('data-foundation', 'true');
+            }
+            document.body.appendChild(brick);
+        } else {
+            clearInterval(interval);
         }
-    }
-
-    addBrick();  
+    }, 100);
 }
 
-function repair(...ids) {
+export function repair(...ids) {
     ids.forEach(id => {
         const brick = document.getElementById(id);
         if (brick) {
-            if (brick.dataset.foundation === 'true') {
-                brick.dataset.repaired = 'in progress';
+            if (brickCount % 3 === 2) {
+                brick.setAttribute('data-repaired', 'in progress');
             } else {
-                brick.dataset.repaired = 'true';
+                brick.setAttribute('data-repaired', 'true');
             }
         }
     });
 }
 
-function destroy() {
-    const lastBrick = document.body.lastElementChild;
-    if (lastBrick && lastBrick.classList.contains('brick')) {
+export function destroy() {
+    const bricks = document.querySelectorAll('div');
+    if (bricks.length > 0) {
+        const lastBrick = bricks[bricks.length - 1];
         lastBrick.remove();
     }
 }
-
-window.build = build;
-window.repair = repair;
-window.destroy = destroy;
-
-build(200);  
