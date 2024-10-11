@@ -15,8 +15,7 @@ export function generateClasses() {
 }
 
 export function generateColdShades() {
-
-    const coldColorNames = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'];
+    const coldColors = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'];
 
     coldColorNames.forEach(color => {
         const div = document.createElement('div');
