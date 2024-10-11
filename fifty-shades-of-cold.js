@@ -2,14 +2,8 @@ import { colors } from './fifty-shades-of-cold.data.js';
 
 export function generateClasses() {
     const styleTag = document.createElement('style');
-    document.head.appendChild(styleTag);
-
-
-    const coldColors = colors.filter(color =>
-        ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'].includes(color)
-    );
-
-    coldColors.forEach(color => {
+    document.head.append
+    colors.forEach(color => {
         styleTag.innerHTML += `
             .${color} {
                 background: ${color};
@@ -19,10 +13,10 @@ export function generateClasses() {
 }
 
 export function generateColdShades() {
+
     const coldColors = colors.filter(color =>
         ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'].includes(color)
     );
-
     coldColors.forEach(color => {
         const div = document.createElement('div');
         div.className = color;
