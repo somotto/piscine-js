@@ -1,23 +1,28 @@
 import { styles } from './pimp-my-style.data.js';
 
-let currentIndex = -1; 
+let currentIndex = 0;
+let isRemoving = false;
 
-const button = document.querySelector('.button');
-
-export function pimp() {
-   
-    if (currentIndex < styles.length - 1) {
-        currentIndex++; 
-        button.classList.toggle('unpimp', true); 
-        button.classList.add(styles[currentIndex]); 
+function pimp() {
+  const button = document.querySelector('.button');
+  
+  if (!isRemoving) {
+    if (currentIndex < styles.length) {
+      button.classList.add(styles[currentIndex]);
+      currentIndex++;
     } else {
-        button.classList.toggle('unpimp', true); 
-        button.classList.remove(styles[currentIndex]); 
-        currentIndex--; 
-
-        if (currentIndex < -1) {
-            button.classList.toggle('unpimp', false); 
-            currentIndex = -1; 
-        }
+      isRemoving = true;
+      button.classList.toggle('unpimp', true);
     }
+  } else {
+    if (currentIndex > 0) {
+      currentIndex--;
+      button.classList.remove(styles[currentIndex]);
+    } else {
+      isRemoving = false;
+      button.classList.toggle('unpimp', false);
+    }
+  }
 }
+
+document.addEventListener('click', pimp);
