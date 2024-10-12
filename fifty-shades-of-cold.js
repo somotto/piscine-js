@@ -1,39 +1,38 @@
-import { colors } from './fifty-shades-of-cold.data.js'
+import { colors } from './fifty-shades-of-cold.data.js';
 
-export function generateClasses() {
-    const style = document.createElement('style')
-    let styleContent = ''
+export const generateClasses = () => {
+  const style = document.createElement('style');
+  let styleContent = colors.map(color => `.${color} { background: ${color}; }`).join('\n');
+  style.textContent = styleContent;
+  document.head.appendChild(style);
+};
 
-    colors.forEach(color => {
-        styleContent += `.${color} { background: ${color}; }\n`
-    })
+export const generateColdShades = () => {
+  const coldColors = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'];
+  const container = document.createElement('div');
+  container.id = 'container';
+  
+  colors.forEach(color => {
+    if (coldColors.some(coldColor => color.includes(coldColor))) {
+      const div = document.createElement('div');
+      div.className = color;
+      div.textContent = color;
+      div.addEventListener('click', () => choseShade(color));
+      container.appendChild(div);
+    }
+  });
 
-    style.textContent = styleContent
-    document.head.appendChild(style)
-}
+  document.body.appendChild(container);
+};
 
-export function generateColdShades() {
-    const coldColors = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple']
-    const container = document.createElement('div')
-    container.style.display = 'flex'
-    container.style.flexWrap = 'wrap'
-    container.style.justifyContent = 'center'
+export const choseShade = (shade) => {
+  const divs = document.querySelectorAll('#container div');
+  divs.forEach(div => {
+    div.className = shade;
+  });
+};
 
-    colors.forEach(color => {
-        if (coldColors.some(coldColor => color.includes(coldColor))) {
-            const div = document.createElement('div')
-            div.className = color
-            div.textContent = color
-            container.appendChild(div)
-        }
-    })
-
-    document.body.appendChild(container)
-}
-
-export function choseShade(shade) {
-    const divs = document.querySelectorAll('div')
-    divs.forEach(div => {
-        div.className = shade
-    })
-}
+document.addEventListener('DOMContentLoaded', () => {
+  generateClasses();
+  generateColdShades();
+});
