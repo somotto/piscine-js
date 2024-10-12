@@ -1,38 +1,45 @@
-import { colors } from './fifty-shades-of-cold.data.js';
-
-export const generateClasses = () => {
-  const style = document.createElement('style');
-  let styleContent = colors.map(color => `.${color} { background: ${color}; }`).join('\n');
-  style.textContent = styleContent;
-  document.head.appendChild(style);
-};
-
-export const generateColdShades = () => {
-  const coldColors = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'];
-  const container = document.createElement('div');
-  container.id = 'container';
+const colors = [
+    'aliceblue', 'antiquewhite', 'aqua', 'aquamarine', 'azure', 'beige', 'bisque', 'black', 'blanchedalmond', 'blue',
+    'blueviolet', 'brown', 'burlywood', 'cadetblue', 'chartreuse', 'chocolate', 'coral', 'cornflowerblue', 'cornsilk',
+    'crimson', 'cyan', 'darkblue', 'darkcyan', 'darkgoldenrod', 'darkgray', 'darkgreen', 'darkkhaki', 'darkmagenta',
+    'darkolivegreen', 'darkorange', 'darkorchid', 'darkred', 'darksalmon', 'darkseagreen', 'darkslateblue',
+    'darkslategray', 'darkturquoise', 'darkviolet', 'deeppink', 'deepskyblue', 'dimgray', 'dodgerblue', 'firebrick',
+    'floralwhite', 'forestgreen', 'fuchsia', 'gainsboro', 'ghostwhite', 'gold', 'goldenrod', 'gray', 'green',
+    'greenyellow', 'honeydew', 'hotpink', 'indianred', 'indigo', 'ivory', 'khaki', 'lavender', 'lavenderblush',
+    'lawngreen', 'lemonchiffon', 'lightblue', 'lightcoral', 'lightcyan', 'lightgoldenrodyellow', 'lightgray',
+    'lightgreen', 'lightpink', 'lightsalmon', 'lightseagreen', 'lightskyblue', 'lightslategray', 'lightsteelblue',
+    'lightyellow', 'lime', 'limegreen', 'linen', 'magenta', 'maroon', 'mediumaquamarine', 'mediumblue', 'mediumorchid',
+    'mediumpurple', 'mediumseagreen', 'mediumslateblue', 'mediumspringgreen', 'mediumturquoise', 'mediumvioletred',
+    'midnightblue', 'mintcream', 'mistyrose', 'moccasin', 'navajowhite', 'navy', 'oldlace', 'olive', 'olivedrab',
+    'orange', 'orangered', 'orchid', 'palegoldenrod', 'palegreen', 'paleturquoise', 'palevioletred', 'papayawhip',
+    'peachpuff', 'peru', 'pink', 'plum', 'powderblue', 'purple', 'rebeccapurple', 'red', 'rosybrown', 'royalblue',
+    'saddlebrown', 'salmon', 'sandybrown', 'seagreen', 'seashell', 'sienna', 'silver', 'skyblue', 'slateblue',
+    'slategray', 'snow', 'springgreen', 'steelblue', 'tan', 'teal', 'thistle', 'tomato', 'turquoise', 'violet',
+    'wheat', 'white', 'whitesmoke', 'yellow', 'yellowgreen'
+  ];
   
-  colors.forEach(color => {
-    if (coldColors.some(coldColor => color.includes(coldColor))) {
-      const div = document.createElement('div');
-      div.className = color;
-      div.textContent = color;
-      div.addEventListener('click', () => choseShade(color));
-      container.appendChild(div);
-    }
-  });
-
-  document.body.appendChild(container);
-};
-
-export const choseShade = (shade) => {
-  const divs = document.querySelectorAll('#container div');
-  divs.forEach(div => {
-    div.className = shade;
-  });
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  generateClasses();
-  generateColdShades();
-});
+  export const generateClasses = () => {
+    const style = document.createElement('style');
+    let styleContent = colors.map(color => `.${color} { background: ${color}; }`).join('\n');
+    style.textContent = styleContent;
+    document.head.appendChild(style);
+  };
+  
+  export const generateColdShades = () => {
+    const coldColors = ['aqua', 'blue', 'turquoise', 'green', 'cyan', 'navy', 'purple'];
+    colors.forEach((color) => {
+      if (coldColors.some((coldColor) => color.includes(coldColor))) {
+        const div = document.createElement('div');
+        div.className = color;
+        div.textContent = color;
+        document.body.appendChild(div);
+      }
+    });
+  };
+  
+  export const choseShade = (shade) => {
+    const divs = document.querySelectorAll('div');
+    divs.forEach((div) => {
+      div.className = shade;
+    });
+  };
