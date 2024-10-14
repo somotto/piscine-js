@@ -12,7 +12,7 @@ function fusion(obj1, obj2) {
             }
 
             else if (typeof obj1[key] === 'string' && typeof obj2[key] === 'string') {
-                result[key] = `${obj1[key]} ${obj2[key]}`.trim();
+                result[key] = obj1[key] + (obj2[key] ? ' ' + obj2[key] : ' ');
             }
             else if (typeof obj1[key] === 'number' && typeof obj2[key] === 'number') {
                 result[key] = obj1[key] + obj2[key];
