@@ -36,13 +36,18 @@ const lowCarbs = (cart) => {
     );
 };
 
+const roundTo = (value, decimals) => {
+    if (value === undefined || value === null) return value;
+    return parseFloat(value.toFixed(decimals));
+};
+
 const cartTotal = (cart) => {
     return mapEntries(cart, ([item, grams]) => {
         const itemNutrition = nutritionDB[item];
         const scaledNutrition = Object.fromEntries(
             Object.entries(itemNutrition).map(([nutrient, value]) => [
                 nutrient,
-                (value * grams) / 100,
+                roundTo((value * grams) / 100, 3),
             ])
         );
         return [item, scaledNutrition];
