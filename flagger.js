@@ -4,6 +4,10 @@ function flags(input) {
       description: ''
     };
   
+    if (Object.keys(input).length === 0) {
+      return output;
+    }
+  
     const descriptionFlags = input.help && Array.isArray(input.help) ? input.help : Object.keys(input);
   
     for (const [flag, description] of Object.entries(input)) {
@@ -17,8 +21,8 @@ function flags(input) {
       }
     }
   
-    if (input.help === undefined) {
-      output.description = `-h, --help: ${Array.isArray(input.help) ? 'Shows the help for the specified flags' : 'Shows the help for all flags'}\n${output.description}`;
+    if (input.help === undefined && output.description) {
+      output.description = `-h, --help: Shows the help for all flags\n${output.description}`;
     }
   
     return output;
