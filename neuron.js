@@ -1,4 +1,7 @@
 function neuron(inputArray) {
+    if (inputArray.length === 0) {
+        return {};
+    }
     const result = {
         questions: {},
         orders: {}
