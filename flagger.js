@@ -4,12 +4,6 @@ function flags(input) {
       description: ''
     };
   
-    if (Object.keys(input).length === 0) {
-      return output;
-    }
-  
-    const descriptionFlags = input.help && Array.isArray(input.help) ? input.help : Object.keys(input);
-  
     for (const [flag, description] of Object.entries(input)) {
       if (flag === 'help') continue;
   
@@ -21,7 +15,8 @@ function flags(input) {
       }
     }
   
-    if (input.help === undefined && output.description) {
+    // If 'help' is not in the input, add descriptions for all flags
+    if (input.help === undefined) {
       output.description = `-h, --help: Shows the help for all flags\n${output.description}`;
     }
   
