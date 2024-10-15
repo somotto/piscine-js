@@ -5,15 +5,18 @@ function replica(target, ...sources) {
     const deepCopy = (target, source) => {
         for (const key in source) {
             if (Object.prototype.hasOwnProperty.call(source, key)) {
-                const value = source[key];
-                if (isPlainObject(value)) {
-                    target[key] = deepCopy({}, value);
-                } else if (Array.isArray(value)) {
-                    target[key] = value.map(item =>
+                const sourceValue = source[key];
+                if (isPlainObject(sourceValue)) {
+                    if (!isPlainObject(target[key])) {
+                        target[key] = {};
+                    }
+                    deepCopy(target[key], sourceValue);
+                } else if (Array.isArray(sourceValue)) {
+                    target[key] = sourceValue.map(item =>
                         isPlainObject(item) ? deepCopy({}, item) : copySpecialTypes(item)
                     );
                 } else {
-                    target[key] = copySpecialTypes(value);
+                    target[key] = copySpecialTypes(sourceValue);
                 }
             }
         }
