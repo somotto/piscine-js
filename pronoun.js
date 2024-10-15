@@ -17,7 +17,7 @@ function pronoun(input) {
             result[word].count++;
             if (i + 1 < words.length) {
                 const nextWord = words[i + 1];
-                if (!result[word].word.includes(nextWord)) {
+                if (!pronouns.includes(nextWord) && !result[word].word.includes(nextWord)) {
                     result[word].word.push(nextWord);
                 }
             }
