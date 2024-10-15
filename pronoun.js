@@ -1,5 +1,7 @@
 function pronoun(input) {
-    const words = input.toLowerCase().split(/\s+/);
+    const words = input.toLowerCase()
+        .split(/\s+/)
+        .map(word => word.replace(/[^\w]/g, ''));
 
     const pronouns = ['i', 'you', 'he', 'she', 'it', 'they', 'we'];
 
@@ -7,7 +9,6 @@ function pronoun(input) {
 
     for (let i = 0; i < words.length; i++) {
         const word = words[i];
-
         if (pronouns.includes(word)) {
             if (!result[word]) {
                 result[word] = { word: [], count: 0 };
@@ -15,8 +16,9 @@ function pronoun(input) {
 
             result[word].count++;
             if (i + 1 < words.length) {
-                if (!result[word].word.includes(words[i + 1])) {
-                    result[word].word.push(words[i + 1]);
+                const nextWord = words[i + 1];
+                if (!result[word].word.includes(nextWord)) {
+                    result[word].word.push(nextWord);
                 }
             }
         }
