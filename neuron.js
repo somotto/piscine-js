@@ -19,8 +19,7 @@ function neuron(inputArray) {
 
         if (!result[categoryLower][key]) {
             result[categoryLower][key] = {
-                [categoryLower === 'questions' ? 'question' :
-                    categoryLower === 'orders' ? 'order' : categoryLower]: query,
+                [getCategoryPropertyName(categoryLower)]: query,
                 responses: []
             };
         }
@@ -35,4 +34,15 @@ function neuron(inputArray) {
     });
 
     return result;
+}
+
+function getCategoryPropertyName(category) {
+    switch (category) {
+        case 'questions':
+            return 'question';
+        case 'orders':
+            return 'order';
+        default:
+            return category.slice(0, -1);
+    }
 }
