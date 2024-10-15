@@ -3,8 +3,18 @@ function deepCopy(item) {
         return item;
     }
 
+    if (item instanceof Date) {
+        return new Date(item.getTime());
+    }
+    if (item instanceof RegExp) {
+        return new RegExp(item.source, item.flags);
+    }
+
     if (Array.isArray(item)) {
         return item.map(element => deepCopy(element));
+    }
+    if (typeof item === 'function') {
+        return item;
     }
 
     const newObject = {};
