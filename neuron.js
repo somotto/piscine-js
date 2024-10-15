@@ -36,4 +36,3 @@ function neuron(inputArray) {
 
     return result;
 }
-
