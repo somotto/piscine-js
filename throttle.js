@@ -11,41 +11,46 @@ function throttle(func, delay) {
 
     return throttled;
 }
-function opThrottle(func, delay, options = {}) {
-    let lastTime = 0;
+function opThrottle(func, wait, options = {}) {
     let timeout = null;
-    let trailingArgs = null;
-    let called = false;
+    let previous = 0;
+    let result;
 
     const { leading = true, trailing = true } = options;
 
-    const throttled = function (...args) {
+    return function (...args) {
         const now = Date.now();
+        const remaining = wait - (now - previous);
 
-        if (leading && !called) {
-            called = true;
-            func.apply(this, args);
-            lastTime = now;
-        } else if (trailing) {
-            trailingArgs = args;
-            if (timeout) {
-                clearTimeout(timeout);
+        if (!previous && leading === false) {
+            previous = now;
+        }
+
+        if (remaining > 0) {
+            clearTimeout(timeout);
+            timeout = setTimeout(() => {
+                previous = leading ? 0 : Date.now();
+                timeout = null;
+                if (trailing) {
+                    result = func.apply(this, args);
+                }
+            }, remaining);
+        } else {
+            clearTimeout(timeout);
+            previous = now;
+
+            if (leading) {
+                result = func.apply(this, args);
             }
 
-            timeout = setTimeout(() => {
-                func.apply(this, trailingArgs);
-                lastTime = now;
-                called = false;
-            }, delay - (now - lastTime));
+            if (trailing && leading === false) {
+                timeout = setTimeout(() => {
+                    previous = leading ? 0 : Date.now();
+                    result = func.apply(this, args);
+                }, wait);
+            }
         }
-    };
 
-    throttled.cancel = function () {
-        clearTimeout(timeout);
-        lastTime = 0;
-        called = false;
-        trailingArgs = null;
+        return result;
     };
-
-    return throttled;
 }
