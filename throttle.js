@@ -11,34 +11,46 @@ function throttle(func, delay) {
 
     return throttled;
 }
-
 function opThrottle(func, delay, options = {}) {
     let lastTime = 0;
     let timeout;
     let trailingCall;
+    let lastArgs;
+    let called = false;
 
     const { leading = true, trailing = true } = options;
 
     const throttled = function (...args) {
         const now = Date.now();
 
-        if (leading && lastTime === 0) {
+        if (leading && !called) {
+            called = true;
             func.apply(this, args);
             lastTime = now;
         }
-
 
         if (timeout) {
             clearTimeout(timeout);
         }
 
-        if (trailing) {
-            trailingCall = () => {
-                lastTime = leading ? 0 : Date.now();
-                func.apply(this, args);
-                timeout = null;
-            };
-            timeout = setTimeout(trailingCall, delay);
+        lastArgs = args;
+        const remaining = delay - (now - lastTime);
+
+        if (remaining <= 0) {
+
+            if (trailing) {
+                func.apply(this, lastArgs);
+                lastTime = now;
+                called = false;
+            }
+        } else if (trailing) {
+            timeout = setTimeout(() => {
+                if (lastArgs) {
+                    func.apply(this, lastArgs);
+                    lastTime = (leading ? 0 : Date.now());
+                    called = false;
+                }
+            }, remaining);
         }
     };
 
@@ -46,6 +58,7 @@ function opThrottle(func, delay, options = {}) {
         clearTimeout(timeout);
         lastTime = 0;
         timeout = null;
+        called = false;
     };
 
     return throttled;
