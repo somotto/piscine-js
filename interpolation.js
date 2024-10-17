@@ -3,7 +3,7 @@ function interpolation({ step, start, end, callback, duration }) {
         const stepSize = (end - start) / step;
         const delayBetweenSteps = duration / step;
 
-        let completedSteps = 0;
+        let callCount = 0;
 
         for (let i = 0; i < step; i++) {
             const x = i / (step - 1);
@@ -11,12 +11,14 @@ function interpolation({ step, start, end, callback, duration }) {
 
             setTimeout(() => {
                 callback([x, y]);
-                completedSteps++;
-                if (completedSteps === step) {
-                    resolve();
+                callCount++;
+
+                if (i === step - 1) {
+                    setTimeout(() => {
+                        resolve({ length: callCount });
+                    }, 0);
                 }
             }, i * delayBetweenSteps);
         }
     });
 }
-
