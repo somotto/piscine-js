@@ -1,24 +1,26 @@
-function throttle(func, wait) {
+function throttle(func, delay) {
     let lastCall = 0;
-    return function (...args) {
+
+    const throttled = function (...args) {
         const now = Date.now();
-        if (now - lastCall >= wait) {
+        if (now - lastCall >= delay) {
             lastCall = now;
-            return func.apply(this, args);
+            func.apply(this, args);
         }
     };
+
+    return throttled;
 }
 
-// Advanced throttle function with options
 function opThrottle(func, delay, options = {}) {
     let lastTime = 0;
     let timeout;
     let trailingCall;
+
     const { leading = true, trailing = true } = options;
 
     const throttled = function (...args) {
         const now = Date.now();
-
 
         if (leading && lastTime === 0) {
             func.apply(this, args);
@@ -29,7 +31,6 @@ function opThrottle(func, delay, options = {}) {
         if (timeout) {
             clearTimeout(timeout);
         }
-
 
         if (trailing) {
             trailingCall = () => {
