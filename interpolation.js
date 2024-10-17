@@ -3,22 +3,21 @@ function interpolation({ step, start, end, callback, duration }) {
         const stepSize = (end - start) / step;
         const delayBetweenSteps = duration / step;
 
-        let callCount = 0;
+        function executeStep(currentStep) {
+            if (currentStep >= step) {
+                setTimeout(() => resolve({ length: 1 }), delayBetweenSteps);
+                return;
+            }
 
-        for (let i = 0; i < step; i++) {
-            const x = i / (step - 1);
-            const y = start + i * stepSize;
+            const x = currentStep / (step - 1);
+            const y = start + currentStep * stepSize;
 
             setTimeout(() => {
                 callback([x, y]);
-                callCount++;
-
-                if (i === step - 1) {
-                    setTimeout(() => {
-                        resolve({ length: callCount });
-                    }, 0);
-                }
-            }, i * delayBetweenSteps);
+                executeStep(currentStep + 1);
+            }, delayBetweenSteps);
         }
+
+        executeStep(0);
     });
 }
