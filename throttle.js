@@ -25,34 +25,19 @@ function opThrottle(func, delay, options = {}) {
         if (leading && !called) {
             called = true;
             func.apply(this, args);
-        } else {
+            lastTime = now;
+        } else if (trailing) {
             trailingArgs = args;
-        }
+            if (timeout) {
+                clearTimeout(timeout);
+            }
 
-        if (timeout) {
-            clearTimeout(timeout);
-        }
-
-        if (trailing) {
-            const remaining = delay - (now - lastTime);
-
-            if (remaining <= 0) {
-
+            timeout = setTimeout(() => {
                 func.apply(this, trailingArgs);
                 lastTime = now;
                 called = false;
-            } else {
-                timeout = setTimeout(() => {
-                    func.apply(this, trailingArgs);
-                    lastTime = now;
-                    called = false;
-
-                    trailingArgs = null;
-                }, remaining);
-            }
+            }, delay - (now - lastTime));
         }
-
-        lastTime = now;
     };
 
     throttled.cancel = function () {
