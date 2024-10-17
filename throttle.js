@@ -11,44 +11,27 @@ function throttle(func, delay) {
 
     return throttled;
 }
-function opThrottle(func, wait, options = {}) {
-    let timeout = null;
-    let previous = 0;
-    let result;
-    let lastArgs = null;
-
-    // Default options
-    const { leading = true, trailing = true } = options;
-
-    const later = function () {
-        previous = leading === false ? 0 : Date.now();
-        timeout = null;
-        if (lastArgs && trailing) {
-            result = func.apply(this, lastArgs);
-            lastArgs = null;
+function opThrottle(fn, wait, { leading = false, trailing = true } = {}) {
+    let last = 0;
+    let timer = null;
+    return function () {
+        const now = +new Date();
+        if (!last && leading === false) {
+            last = now;
         }
-    };
-
-    return function (...args) {
-        const now = Date.now();
-        if (!previous && leading === false) {
-            previous = now;
-        }
-        const remaining = wait - (now - previous);
-
-        if (remaining <= 0 || remaining > wait) {
-            if (timeout) {
-                clearTimeout(timeout);
-                timeout = null;
+        if (now - last > wait) {
+            if (timer) {
+                clearTimeout(timer);
+                timer = null;
             }
-            previous = now;
-            result = func.apply(this, args);
-            lastArgs = null;
-        } else if (!timeout && trailing) {
-            lastArgs = args;
-            timeout = setTimeout(later, remaining);
+            fn.apply(this, arguments);
+            last = now;
+        } else if (!timer && trailing !== false) {
+            timer = setTimeout(() => {
+                fn.apply(this, arguments);
+                last = +new Date();
+                timer = null;
+            }, wait);
         }
-
-        return result;
     };
 }
