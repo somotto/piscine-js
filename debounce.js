@@ -15,22 +15,27 @@ function debounce(func, wait) {
 // Debounce function with leading option
 function opDebounce(func, wait, options = {}) {
     let timeout;
-    let isLeadingCall = true;
+    let lastCallTime = 0;
 
     return function executedFunction(...args) {
+        const currentTime = Date.now();
+        const isLeadingCall = options.leading && (currentTime - lastCallTime) >= wait;
+
         const later = () => {
             timeout = null;
-            if (!options.leading) func(...args);
+            if (!options.leading) {
+                lastCallTime = Date.now();
+                func(...args);
+            }
         };
 
-        const callNow = options.leading && isLeadingCall;
-
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-
-        if (callNow) {
-            isLeadingCall = false;
+        if (isLeadingCall) {
+            lastCallTime = currentTime;
             func(...args);
+        } else {
+            clearTimeout(timeout);
         }
+
+        timeout = setTimeout(later, wait);
     };
 }
