@@ -15,7 +15,7 @@ function opThrottle(func, wait, options = {}) {
     let previous = 0;
     let result;
 
-    return function (...args) {
+    return function throttled(...args) {
         const now = Date.now();
         const { leading = true, trailing = true } = options;
 
@@ -46,18 +46,5 @@ function opThrottle(func, wait, options = {}) {
     };
 }
 
-function add(a, b) {
-    return a + b;
-}
-
-async function run(throttledFunc, ...args) {
-    let callCount = 0;
-    const start = Date.now();
-    while (Date.now() - start < 50) {
-        throttledFunc(...args);
-        callCount++;
-    }
-    await new Promise(resolve => setTimeout(resolve, 30));
-    return callCount;
-}
-
+// Export the functions
+export { throttle, opThrottle };
