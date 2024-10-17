@@ -17,33 +17,37 @@ function opThrottle(func, wait, options = {}) {
 
     return function throttled(...args) {
         const now = Date.now();
-        const { trailing = true } = options;
+        const { leading = true, trailing = true } = options;
 
-        if (!previous) {
+        if (!previous && leading === false) {
             previous = now;
         }
 
         const remaining = wait - (now - previous);
 
-        if (timeout) {
-            clearTimeout(timeout);
+        function later() {
+            previous = leading === false ? 0 : Date.now();
+            timeout = null;
+            result = func.apply(this, args);
         }
 
-        if (remaining <= 0 || remaining > wait) {
+        if (remaining <= 0) {
             if (timeout) {
                 clearTimeout(timeout);
                 timeout = null;
             }
             previous = now;
             result = func.apply(this, args);
-        } else if (trailing) {
-            timeout = setTimeout(() => {
-                previous = now;
-                timeout = null;
-                result = func.apply(this, args);
-            }, wait);
+        } else if (!timeout && trailing) {
+            timeout = setTimeout(later, remaining);
+        }
+
+        if (leading && !previous) {
+            previous = now;
+            result = func.apply(this, args);
         }
 
         return result;
     };
 }
+
