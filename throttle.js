@@ -10,44 +10,42 @@ function throttle(func, wait) {
 }
 
 // Advanced throttle function with options
-function opThrottle(func, wait, options = {}) {
-    let timeout = null;
-    let previous = 0;
-    let result;
+function opThrottle(func, delay, options = {}) {
+    let lastTime = 0;
+    let timeout;
+    let trailingCall;
+    const { leading = true, trailing = true } = options;
 
-    return function throttled(...args) {
+    const throttled = function (...args) {
         const now = Date.now();
-        const { leading = true, trailing = true } = options;
 
-        if (!previous && leading === false) {
-            previous = now;
+
+        if (leading && lastTime === 0) {
+            func.apply(this, args);
+            lastTime = now;
         }
 
-        const remaining = wait - (now - previous);
 
-        function later() {
-            previous = leading === false ? 0 : Date.now();
-            timeout = null;
-            result = func.apply(this, args);
+        if (timeout) {
+            clearTimeout(timeout);
         }
 
-        if (remaining <= 0) {
-            if (timeout) {
-                clearTimeout(timeout);
+
+        if (trailing) {
+            trailingCall = () => {
+                lastTime = leading ? 0 : Date.now();
+                func.apply(this, args);
                 timeout = null;
-            }
-            previous = now;
-            result = func.apply(this, args);
-        } else if (!timeout && trailing) {
-            timeout = setTimeout(later, remaining);
+            };
+            timeout = setTimeout(trailingCall, delay);
         }
-
-        if (leading && !previous) {
-            previous = now;
-            result = func.apply(this, args);
-        }
-
-        return result;
     };
-}
 
+    throttled.cancel = function () {
+        clearTimeout(timeout);
+        lastTime = 0;
+        timeout = null;
+    };
+
+    return throttled;
+}
