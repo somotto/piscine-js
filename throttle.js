@@ -15,40 +15,38 @@ function opThrottle(func, wait, options = {}) {
     let timeout = null;
     let previous = 0;
     let result;
+    let lastArgs = null;
 
+    // Default options
     const { leading = true, trailing = true } = options;
+
+    const later = function () {
+        previous = leading === false ? 0 : Date.now();
+        timeout = null;
+        if (lastArgs && trailing) {
+            result = func.apply(this, lastArgs);
+            lastArgs = null;
+        }
+    };
 
     return function (...args) {
         const now = Date.now();
-        const remaining = wait - (now - previous);
-
         if (!previous && leading === false) {
             previous = now;
         }
+        const remaining = wait - (now - previous);
 
-        if (remaining > 0) {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => {
-                previous = leading ? 0 : Date.now();
+        if (remaining <= 0 || remaining > wait) {
+            if (timeout) {
+                clearTimeout(timeout);
                 timeout = null;
-                if (trailing) {
-                    result = func.apply(this, args);
-                }
-            }, remaining);
-        } else {
-            clearTimeout(timeout);
+            }
             previous = now;
-
-            if (leading) {
-                result = func.apply(this, args);
-            }
-
-            if (trailing && leading === false) {
-                timeout = setTimeout(() => {
-                    previous = leading ? 0 : Date.now();
-                    result = func.apply(this, args);
-                }, wait);
-            }
+            result = func.apply(this, args);
+            lastArgs = null;
+        } else if (!timeout && trailing) {
+            lastArgs = args;
+            timeout = setTimeout(later, remaining);
         }
 
         return result;
