@@ -12,33 +12,33 @@ function some(promises, count) {
     return new Promise((resolve) => {
 
         if (!Array.isArray(promises) || count === 0) {
-            resolve(undefined);
             return;
         }
 
         const results = [];
         let settledCount = 0;
 
-        promises.forEach((promise) => {
+        const maxCount = Math.min(promises.length, count);
 
+        promises.forEach((promise) => {
             Promise.resolve(promise).then((value) => {
                 results.push(value);
                 settledCount++;
 
-                if (settledCount === count) {
+                if (settledCount === maxCount) {
                     resolve(results);
                 }
             }).catch(() => {
                 settledCount++;
-                if (settledCount === count) {
+                if (settledCount === maxCount) {
                     resolve(results);
                 }
             });
         });
 
         setTimeout(() => {
-            if (settledCount < count) {
-                resolve(results.length > 0 ? results : undefined);
+            if (settledCount < maxCount) {
+                resolve(results);
             }
         }, 0);
     });
