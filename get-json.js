@@ -1,9 +1,13 @@
 function getJSON(path, params = {}) {
-    // Construct URL with path and params
-    const url = new URL(path);
-    url.search = new URLSearchParams(params).toString();
+    const baseUrl = 'http://example.com';
+    const url = new URL(path, baseUrl);
 
-    return fetch(url)
+    // Add query parameters
+    Object.keys(params).forEach(key => {
+        url.searchParams.append(key, params[key]);
+    });
+
+    return fetch(url.toString())
         .then(response => {
             if (!response.ok) {
                 throw new Error(response.statusText);
