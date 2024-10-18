@@ -8,43 +8,42 @@ function race(promises) {
     });
 }
 
-function some(promises, count) {
-    return new Promise((resolve) => {
+async function some(promises, count) {
+    if (!Array.isArray(promises) || count <= 0) {
+        return [];
+    }
 
-        if (!Array.isArray(promises) || count <= 0) {
-            resolve([]);
-            return;
-        }
+    const results = new Array(promises.length);
+    let settledCount = 0;
+    let maxCount = Math.min(promises.length, count);
 
-        const results = [];
-        let settledCount = 0;
-        let totalPromises = promises.length;
 
-        promises.forEach((promise) => {
+    promises.forEach((promise, index) => {
 
-            Promise.resolve(promise).then((value) => {
+        Promise.resolve(promise).then((value) => {
+            results[index] = value;
+            settledCount++;
 
-                if (results.length < count) {
-                    results.push(value);
-                }
-                settledCount++;
+            if (settledCount === maxCount) {
+                results.length = maxCount;
+                return results;
+            }
+        }).catch(() => {
+            results[index] = undefined;
+            settledCount++;
 
-                if (results.length === count) {
-                    resolve(results);
-                }
-            }).catch(() => {
-                settledCount++;
-
-                if (results.length === count || settledCount === totalPromises) {
-                    resolve(results);
-                }
-            });
+            if (settledCount === maxCount) {
+                results.length = maxCount;
+                return results;
+            }
         });
+    });
 
-        const checkComplete = setInterval(() => {
-            if (settledCount === totalPromises) {
-                clearInterval(checkComplete);
-                resolve(results);
+    return new Promise((resolve) => {
+        const checkInterval = setInterval(() => {
+            if (settledCount >= promises.length) {
+                clearInterval(checkInterval);
+                resolve(results.slice(0, maxCount));
             }
         }, 0);
     });
