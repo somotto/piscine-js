@@ -7,7 +7,7 @@ function interpolation({ step, start, end, callback, duration }) {
     for (let i = 1; i <= step; i++) {
 
         const x = i / step;
-        const y = start + i * stepSize;
+        const y = i * delay;
 
         setTimeout(() => {
             callback([x, y]);
