@@ -11,33 +11,39 @@ function race(promises) {
 function some(promises, count) {
     return new Promise((resolve) => {
 
-        if (!Array.isArray(promises) || count === 0) {
+        if (!Array.isArray(promises) || count <= 0) {
+            resolve([]);
             return;
         }
 
         const results = [];
         let settledCount = 0;
-
-        const maxCount = Math.min(promises.length, count);
+        let totalPromises = promises.length;
 
         promises.forEach((promise) => {
+
             Promise.resolve(promise).then((value) => {
-                results.push(value);
+
+                if (results.length < count) {
+                    results.push(value);
+                }
                 settledCount++;
 
-                if (settledCount === maxCount) {
+                if (results.length === count) {
                     resolve(results);
                 }
             }).catch(() => {
                 settledCount++;
-                if (settledCount === maxCount) {
+
+                if (results.length === count || settledCount === totalPromises) {
                     resolve(results);
                 }
             });
         });
 
-        setTimeout(() => {
-            if (settledCount < maxCount) {
+        const checkComplete = setInterval(() => {
+            if (settledCount === totalPromises) {
+                clearInterval(checkComplete);
                 resolve(results);
             }
         }, 0);
