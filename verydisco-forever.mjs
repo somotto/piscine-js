@@ -1,25 +1,34 @@
 import { writeFile } from 'fs/promises';
 
-function generateVerydiscoResult() {
-    return 'verydisco';
+function verydisco(input) {
+    let result = '';
+    for (let i = 0; i < input.length; i += 2) {
+        if (i + 1 < input.length) {
+            result += input[i + 1] + input[i];
+        } else {
+            result += input[i];
+        }
+    }
+    return result;
 }
 
-async function writeVerydiscoForever() {
-    const result = generateVerydiscoResult();
+async function writeVerydiscoForever(input) {
+    const result = verydisco(input);
 
     try {
         await writeFile('verydisco-forever.txt', result);
         console.log('The result has been written to verydisco-forever.txt');
-        return result; // Return the result for testing purposes
+        return result;
     } catch (error) {
         console.error('An error occurred while writing the file:', error);
-        throw error; // Rethrow the error for proper handling in tests
+        throw error; 
     }
 }
 
-// Only run the function if this script is being run directly (not imported as a module)
+
 if (import.meta.url === `file://${process.argv[1]}`) {
-    writeVerydiscoForever();
+    const input = process.argv[2] || 'verydisco';
+    writeVerydiscoForever(input);
 }
 
 export { writeVerydiscoForever };
