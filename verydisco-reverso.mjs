@@ -1,26 +1,31 @@
-import { readFile } from 'fs/promises';
+import { readFileSync } from 'fs';
+const filename = process.argv.slice(2)[0];
 
-const filename = process.argv[2];
+
+const veryDiscoWord = (word) => {
+    const mid = Math.floor(word.length / 2);
+    return word.slice(mid) + word.slice(0, mid)
+}
+
+
+
+let fileContent;
+
+
+
 
 try {
-    const readAndTransform = async (file) => {
-        const data = await readFile(file, 'utf8').trim();
-
-
-        const transformationMap = {
-            'verydisco': 'discovery',
-            'kisscool': 'coolkiss'
-        };
-
-        const transformedOutput = transformationMap[data] || data.split('').reverse().join('');
-
-        console.log(transformedOutput);
-    };
-
-    readAndTransform(filename).catch(err => {
-        console.error(`Error reading file: ${err.message}`);
-    });
-
+    fileContent = readFileSync(filename, 'utf-8');
 } catch (error) {
-    console.error(`An error occurred: ${error.message}`);
+    console.error(`Error reading file: ${error.message}`);
+    process.exit(1);
 }
+
+
+const discoSentence = fileContent
+        .split(' ')
+        .map(veryDiscoWord)
+        .join(' ');
+
+
+console.log(discoSentence)
