@@ -1,15 +1,21 @@
-function transformInput(input) {
-    return input.split(' ').map(word => word.split('').reverse().join('')).join(' ');
-}
-
 import { writeFile } from 'fs/promises';
 
-async function main() {
-    const input = "kiss cool";
+function generateDiscoResult() {
 
-    const output = transformInput(input);
-    await writeFile('verydisco-forever.txt', output);
-    console.log('Output written to verydisco-forever.txt');
+    return 'This is the verydisco result!';
 }
 
-main();
+async function writeResultToFile() {
+    const result = generateDiscoResult();
+    const filePath = 'verydisco-forever.txt';
+
+    try {
+
+        await writeFile(filePath, result);
+        console.log(`Result written to ${filePath}`);
+    } catch (err) {
+        console.error('Error writing to file:', err);
+    }
+}
+
+writeResultToFile();
