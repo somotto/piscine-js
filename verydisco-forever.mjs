@@ -1,34 +1,21 @@
+function verydisco() {
+    let output = "Disco is forever!";
+    for (let i = 0; i < 5; i++) {
+        output += ` Round ${i + 1}`;
+    }
+    return output;
+}
+
 import { writeFile } from 'fs/promises';
 
-function verydisco(input) {
-    let result = '';
-    for (let i = 0; i < input.length; i += 2) {
-        if (i + 1 < input.length) {
-            result += input[i + 1] + input[i];
-        } else {
-            result += input[i];
-        }
-    }
-    return result;
-}
-
-async function writeVerydiscoForever(input) {
-    const result = verydisco(input);
-
+async function main() {
     try {
-        await writeFile('verydisco-forever.txt', result);
-        console.log('The result has been written to verydisco-forever.txt');
-        return result;
+        const output = verydisco();
+        await writeFile('verydisco-forever.txt', output);
+        console.log('Output written to verydisco-forever.txt');
     } catch (error) {
-        console.error('An error occurred while writing the file:', error);
-        throw error; 
+        console.error('Error writing to file:', error);
     }
 }
 
-
-if (import.meta.url === `file://${process.argv[1]}`) {
-    const input = process.argv[2] || 'verydisco';
-    writeVerydiscoForever(input);
-}
-
-export { writeVerydiscoForever };
+main();
