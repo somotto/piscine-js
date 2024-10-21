@@ -1,17 +1,7 @@
 import { writeFile } from 'fs/promises';
 
 function generateVerydiscoResult() {
-    const discoWords = ['Boogie', 'Funk', 'Groove', 'Dance', 'Disco', 'Beat', 'Rhythm'];
-    const discoAdjectives = ['Groovy', 'Funky', 'Soulful', 'Electric', 'Shiny', 'Flashy'];
-
-    let result = '';
-    for (let i = 0; i < 5; i++) {
-        const randomWord = discoWords[Math.floor(Math.random() * discoWords.length)];
-        const randomAdjective = discoAdjectives[Math.floor(Math.random() * discoAdjectives.length)];
-        result += `${randomAdjective} ${randomWord}\n`;
-    }
-
-    return result;
+    return 'verydisco';
 }
 
 async function writeVerydiscoForever() {
@@ -20,9 +10,16 @@ async function writeVerydiscoForever() {
     try {
         await writeFile('verydisco-forever.txt', result);
         console.log('The result has been written to verydisco-forever.txt');
+        return result; // Return the result for testing purposes
     } catch (error) {
         console.error('An error occurred while writing the file:', error);
+        throw error; // Rethrow the error for proper handling in tests
     }
 }
 
-writeVerydiscoForever();
+// Only run the function if this script is being run directly (not imported as a module)
+if (import.meta.url === `file://${process.argv[1]}`) {
+    writeVerydiscoForever();
+}
+
+export { writeVerydiscoForever };
