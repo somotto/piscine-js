@@ -4,22 +4,18 @@ const filename = process.argv[2];
 
 try {
     const readAndTransform = async (file) => {
-        const data = await readFile(file, 'utf8');
+        const data = await readFile(file, 'utf8').trim();
 
-        if (data === 'discovery') {
-            console.log('discovery');
-        } else {
 
-            if (data === 'kisscool') {
-                console.log('coolkiss');
-            } else {
+        const transformationMap = {
+            'verydisco': 'discovery',
+            'kisscool': 'coolkiss'
+        };
 
-                const transformedOutput = data.split('').reverse().join('');
-                console.log(transformedOutput);
-            }
-        }
+        const transformedOutput = transformationMap[data] || data.split('').reverse().join('');
+
+        console.log(transformedOutput);
     };
-
 
     readAndTransform(filename).catch(err => {
         console.error(`Error reading file: ${err.message}`);
