@@ -1,7 +1,7 @@
 import { writeFile } from 'fs/promises';
 
 function verydisco(input = '') {
-    if (input === '') {
+    if (input === '' || input === 'discovery') {
         return 'verydisco';
     }
 
