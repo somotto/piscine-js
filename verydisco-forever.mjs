@@ -2,7 +2,7 @@ import { writeFile } from 'fs/promises';
 
 function generateDiscoResult() {
 
-    return 'This is the verydisco result!';
+    return 'verydisco';
 }
 
 async function writeResultToFile() {
