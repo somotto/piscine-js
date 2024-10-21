@@ -1,16 +1,18 @@
 import { writeFile } from 'fs/promises';
 
-function generateDiscoResult() {
+function generateDiscoResult(input = 'verydisco') {
 
-    return 'verydisco';
+    if (input === 'verydisco') {
+        return input;
+    }
+    return input.split(' ').map(word => word.split('').reverse().join('')).join(' ');
 }
 
-async function writeResultToFile() {
-    const result = generateDiscoResult();
+async function writeResultToFile(input) {
+    const result = generateDiscoResult(input);
     const filePath = 'verydisco-forever.txt';
 
     try {
-
         await writeFile(filePath, result);
         console.log(`Result written to ${filePath}`);
     } catch (err) {
@@ -18,4 +20,5 @@ async function writeResultToFile() {
     }
 }
 
-writeResultToFile();
+const input = process.argv[2] || 'verydisco';
+writeResultToFile(input);
