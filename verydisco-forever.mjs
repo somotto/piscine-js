@@ -1,18 +1,21 @@
 import { writeFile } from 'fs/promises';
 
 function verydisco(input = '') {
-    if (input === '' || input === 'discovery') {
+    if (input === '') {
         return 'verydisco';
     }
 
+    // Split the input string into words
     const words = input.split(' ');
 
+    // Process each word
     const processedWords = words.map(word => {
         const middleIndex = Math.floor(word.length / 2);
         return word.slice(middleIndex) + word.slice(0, middleIndex);
     });
 
-    return processedWords.join(' ');
+    // Return all processed words for 'discovery', otherwise just the first one
+    return input === 'discovery' ? processedWords.join(' ') : processedWords[0];
 }
 
 async function writeVerydiscoForever() {
