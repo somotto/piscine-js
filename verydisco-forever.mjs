@@ -1,9 +1,5 @@
 function verydisco() {
-    let output = "Disco is forever!";
-    for (let i = 0; i < 5; i++) {
-        output += ` Round ${i + 1}`;
-    }
-    return output;
+    return 'verydisco';
 }
 
 import { writeFile } from 'fs/promises';
