@@ -10,7 +10,10 @@ try {
 
         const reversedContent = data.split('').reverse().join('');
 
-        console.log(reversedContent);
+        const mid = Math.floor(reversedContent.length / 2);
+        const finalOutput = `${reversedContent.slice(mid)}${reversedContent.slice(0, mid)}`;
+
+        console.log(finalOutput);
     };
 
     readAndReverse(filename).catch(err => {
