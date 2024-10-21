@@ -1,24 +1,31 @@
 import { writeFile } from 'fs/promises';
 
-function generateDiscoResult(input = 'verydisco') {
-
-    if (input === 'verydisco') {
-        return input;
+function verydisco(input = '') {
+    if (input === '') {
+        return 'verydisco';
     }
-    return input.split(' ').map(word => word.split('').reverse().join('')).join(' ');
+
+    const words = input.split(' ');
+
+    const processedWords = words.map(word => {
+        const middleIndex = Math.floor(word.length / 2);
+        return word.slice(middleIndex) + word.slice(0, middleIndex);
+    });
+
+    return processedWords.join(' ');
 }
 
-async function writeResultToFile(input) {
-    const result = generateDiscoResult(input);
-    const filePath = 'verydisco-forever.txt';
+async function writeVerydiscoForever() {
+    const args = process.argv.slice(2);
+    const input = args.join(' ');
+    const result = verydisco(input);
 
     try {
-        await writeFile(filePath, result);
-        console.log(`Result written to ${filePath}`);
-    } catch (err) {
-        console.error('Error writing to file:', err);
+        await writeFile('verydisco-forever.txt', result);
+        console.log('The result has been written to verydisco-forever.txt');
+    } catch (error) {
+        console.error('An error occurred while writing the file:', error);
     }
 }
 
-const input = process.argv[2] || 'verydisco';
-writeResultToFile(input);
+writeVerydiscoForever();
