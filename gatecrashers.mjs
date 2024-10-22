@@ -1,16 +1,13 @@
-import http from 'http';
-import fs from 'fs';
-import path from 'path';
+import http from 'http'
+import fs from 'fs/promises'
+import path from 'path'
 
-const PORT = 5000;
-
-const GUESTS_DIR = process.cwd();
+const port = 5000;
+const base_dir = process.cwd();
 
 const authorized_users = {
-    'Caleb_Squires': 'abracadabra',
-    'Tyrique_Dalton': 'abracadabra',
-    'Rahima_Young': 'abracadabra'
-};
+    'Caleb_Squires': 'abracadabra', 'Tyrique_Dalton': 'abracadabra', 'Rahima_Young': 'abracadabra'
+}
 
 const parse_auth_header = (auth_header) => {
     if (!auth_header || !auth_header.startsWith('Basic ')) return null;
@@ -46,7 +43,7 @@ const server = http.createServer((req, res) => {
 
                 const guest_name = req.url.slice(1);
 
-                const guest_dir = path.join(GUESTS_DIR, 'guests');
+                const guest_dir = path.join(base_dir, 'guests');
                 await fs.mkdir(guest_dir, { recursive: true });
 
                 const file_path = path.join(guest_dir, `${guest_name}.json`);
@@ -65,6 +62,7 @@ const server = http.createServer((req, res) => {
     }
 })
 
-server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+
+server.listen(port, () => {
+    console.log(`Server listening on port ${port}`)
+})
