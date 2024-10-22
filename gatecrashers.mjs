@@ -20,6 +20,9 @@ function authenticateUser(authHeader) {
     return AUTHORIZED_USERS[username] === password;
 }
 
+const baseDir = process.argv[2] || process.cwd();
+const guestsDir = path.join(baseDir, 'guests');
+
 const server = http.createServer((req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
@@ -44,11 +47,17 @@ const server = http.createServer((req, res) => {
 
     req.on('end', () => {
         try {
+
             const guestData = JSON.parse(body);
+
 
             const guestName = req.url.slice(1);
 
-            const filePath = path.join('guests', `${guestName}.json`);
+            if (!fs.existsSync(guestsDir)) {
+                fs.mkdirSync(guestsDir, { recursive: true });
+            }
+
+            const filePath = path.join(guestsDir, `${guestName}.json`);
             fs.writeFileSync(filePath, JSON.stringify(guestData));
 
             res.writeHead(200);
