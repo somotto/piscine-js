@@ -4,6 +4,12 @@ import path from 'path';
 
 const PORT = 5000;
 
+const GUESTS_DIR = path.join(process.cwd(), 'guests');
+
+if (!fs.existsSync(GUESTS_DIR)) {
+    fs.mkdirSync(GUESTS_DIR);
+}
+
 const authorizedUsers = {
     'Caleb_Squires': 'abracadabra',
     'Tyrique_Dalton': 'abracadabra',
@@ -40,10 +46,11 @@ const requestHandler = (req, res) => {
 
                 const jsonData = JSON.parse(body);
 
-                const filePath = path.join(process.cwd(), 'guests', `${guestName}.json`);
+                const filePath = path.join(GUESTS_DIR, `${guestName}.json`);
 
                 fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), (err) => {
                     if (err) {
+                        console.error('Error writing file:', err);
                         res.writeHead(500, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ message: 'Internal Server Error' }));
                         return;
@@ -53,6 +60,7 @@ const requestHandler = (req, res) => {
                     res.end(JSON.stringify(jsonData));
                 });
             } catch (error) {
+                console.error('Error parsing JSON:', error);
                 res.writeHead(400, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify({ message: 'Invalid JSON' }));
             }
