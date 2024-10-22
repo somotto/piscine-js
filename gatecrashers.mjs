@@ -4,75 +4,66 @@ import path from 'path';
 
 const PORT = 5000;
 
-const GUESTS_DIR = path.join(process.cwd(), 'guests');
+const GUESTS_DIR = process.cwd();
 
-if (!fs.existsSync(GUESTS_DIR)) {
-    fs.mkdirSync(GUESTS_DIR);
-}
-
-const authorizedUsers = {
+const authorized_users = {
     'Caleb_Squires': 'abracadabra',
     'Tyrique_Dalton': 'abracadabra',
     'Rahima_Young': 'abracadabra'
 };
 
-const requestHandler = (req, res) => {
-    const authHeader = req.headers['authorization'];
+const parse_auth_header = (auth_header) => {
+    if (!auth_header || !auth_header.startsWith('Basic ')) return null;
+    const credentials = auth_header.slice(6);
+    const [username, password] = Buffer.from(credentials, 'base64').toString().split(':')
+    return { username, password }
+}
 
-    if (!authHeader) {
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Authorization Required' }));
+const server = http.createServer((req, res) => {
+    const auth = parse_auth_header(req.headers.authorization);
+    if (!auth || !authorized_users[auth.username] || authorized_users[auth.username] !== auth.password) {
+        res.writeHead(401, {
+            'Content-Type': 'application/json',
+            'WWW-Authenticate': 'Basic realm="Authorization Required"'
+        });
+        res.end(JSON.stringify({ error: 'Authorization Required' }))
         return;
     }
-
-    const [username, password] = Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
-
-    if (!authorizedUsers[username] || authorizedUsers[username] !== password) {
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Authorization Required' }));
-        return;
-    }
-
     if (req.method === 'POST') {
-        const guestName = req.url.slice(1);
-        let body = '';
-
-        req.on('data', (chunk) => {
-            body += chunk.toString();
+        let body = ''
+        req.on('data', chunk => {
+            body += chunk.toString()
         });
-
-        req.on('end', () => {
+        req.on('end', async () => {
             try {
-
-                const jsonData = JSON.parse(body);
-
-                const filePath = path.join(GUESTS_DIR, `${guestName}.json`);
-
-                fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), (err) => {
-                    if (err) {
-                        console.error('Error writing file:', err);
-                        res.writeHead(500, { 'Content-Type': 'application/json' });
-                        res.end(JSON.stringify({ message: 'Internal Server Error' }));
-                        return;
+                if (!body) {
+                    body = {
+                        answer: 'yes',
+                        drink: 'juice',
+                        food: 'pizza'
                     }
+                }
 
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify(jsonData));
-                });
-            } catch (error) {
-                console.error('Error parsing JSON:', error);
-                res.writeHead(400, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ message: 'Invalid JSON' }));
+                const guest_name = req.url.slice(1);
+
+                const guest_dir = path.join(GUESTS_DIR, 'guests');
+                await fs.mkdir(guest_dir, { recursive: true });
+
+                const file_path = path.join(guest_dir, `${guest_name}.json`);
+                await fs.writeFile(file_path, JSON.stringify(body, null, 2));
+                res.writeHead(200, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify(body))
+
+            } catch (e) {
+                res.writeHead(500, { 'Content-Type': 'application/json' })
+                res.end(JSON.stringify({ error: 'Internal Server Error' }))
             }
-        });
-
+        })
     } else {
-        res.writeHead(405, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Method Not Allowed' }));
+        res.writeHead(405, { 'Content-Type': 'application/json' })
+        res.end(JSON.stringify({ error: 'Method not allowed' }))
     }
-};
-
-const server = http.createServer(requestHandler);
+})
 
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
