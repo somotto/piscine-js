@@ -1,6 +1,11 @@
-const http = require('http');
-const fs = require('fs');
-const path = require('path');
+import http from 'http';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 const AUTHORIZED_USERS = {
     'Caleb_Squires': 'abracadabra',
@@ -24,11 +29,13 @@ const server = http.createServer((req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
 
+
     if (req.method !== 'POST') {
         res.writeHead(405);
         res.end('Method Not Allowed');
         return;
     }
+
 
     const authHeader = req.headers.authorization;
     if (!authenticateUser(authHeader)) {
@@ -36,6 +43,7 @@ const server = http.createServer((req, res) => {
         res.end('Authorization Required');
         return;
     }
+
 
     let body = '';
     req.on('data', chunk => {
@@ -47,7 +55,9 @@ const server = http.createServer((req, res) => {
 
             const guestData = JSON.parse(body);
 
+
             const guestName = req.url.slice(1);
+
 
             if (!fs.existsSync('guests')) {
                 fs.mkdirSync('guests');
