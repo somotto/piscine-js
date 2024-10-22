@@ -8,7 +8,6 @@ const AUTHORIZED_USERS = {
     'Rahima_Young': 'abracadabra'
 };
 
-
 function authenticateUser(authHeader) {
     if (!authHeader || !authHeader.startsWith('Basic ')) {
         return false;
@@ -20,9 +19,6 @@ function authenticateUser(authHeader) {
 
     return AUTHORIZED_USERS[username] === password;
 }
-
-const guestsDir = process.argv[2] ? path.join(process.argv[2], 'guests') : path.join(process.cwd(), 'guests');
-
 
 const server = http.createServer((req, res) => {
 
@@ -48,18 +44,12 @@ const server = http.createServer((req, res) => {
 
     req.on('end', () => {
         try {
-
             const guestData = JSON.parse(body);
 
             const guestName = req.url.slice(1);
 
-            if (!fs.existsSync(guestsDir)) {
-                fs.mkdirSync(guestsDir, { recursive: true });
-            }
-
-
-            const filePath = path.join(guestsDir, `${guestName}.json`);
-            fs.writeFileSync(filePath, JSON.stringify(guestData, null, 2));
+            const filePath = path.join('guests', `${guestName}.json`);
+            fs.writeFileSync(filePath, JSON.stringify(guestData));
 
             res.writeHead(200);
             res.end(JSON.stringify(guestData));
@@ -69,7 +59,6 @@ const server = http.createServer((req, res) => {
         }
     });
 });
-
 
 const PORT = 5000;
 server.listen(PORT, () => {
