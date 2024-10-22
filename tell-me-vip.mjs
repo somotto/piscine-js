@@ -1,17 +1,24 @@
-import { readFile } from 'node:fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
-async function createVipList() {
+async function createVipList(dirName = '.') {
     try {
 
-        const data = await readFile(join('guests.json'), 'utf8')
+        let guests = []
+        try {
+            const data = await readFile(join(dirName, 'guests.json'), 'utf8')
+            guests = JSON.parse(data)
+        } catch (err) {
 
-
-        const guests = JSON.parse(data)
+            if (err.code === 'ENOENT') {
+                guests = []
+            } else {
+                throw err
+            }
+        }
 
         const vipGuests = guests
             .filter(guest => guest.response === 'YES')
-
             .sort((a, b) => {
                 if (a.lastname !== b.lastname) {
                     return a.lastname.localeCompare(b.lastname)
@@ -32,4 +39,5 @@ async function createVipList() {
     }
 }
 
-createVipList()
+const dirName = process.argv[2]
+createVipList(dirName)
