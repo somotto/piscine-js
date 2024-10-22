@@ -21,7 +21,6 @@ const requestHandler = (req, res) => {
 
     const [username, password] = Buffer.from(authHeader.split(' ')[1], 'base64').toString().split(':');
 
-
     if (!authorizedUsers[username] || authorizedUsers[username] !== password) {
         res.writeHead(401, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Authorization Required' }));
@@ -37,23 +36,29 @@ const requestHandler = (req, res) => {
         });
 
         req.on('end', () => {
+            try {
 
-            const filePath = path.join(process.cwd(), 'guests', `${guestName}.json`);
+                const jsonData = JSON.parse(body);
 
-            fs.writeFile(filePath, body, (err) => {
-                if (err) {
-                    res.writeHead(500, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({ message: 'Internal Server Error' }));
-                    return;
-                }
+                const filePath = path.join(process.cwd(), 'guests', `${guestName}.json`);
 
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(body);
-            });
+                fs.writeFile(filePath, JSON.stringify(jsonData, null, 2), (err) => {
+                    if (err) {
+                        res.writeHead(500, { 'Content-Type': 'application/json' });
+                        res.end(JSON.stringify({ message: 'Internal Server Error' }));
+                        return;
+                    }
+
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.end(JSON.stringify(jsonData));
+                });
+            } catch (error) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: 'Invalid JSON' }));
+            }
         });
 
     } else {
-
         res.writeHead(405, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Method Not Allowed' }));
     }
