@@ -1,17 +1,13 @@
 import http from 'http';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 
 const AUTHORIZED_USERS = {
     'Caleb_Squires': 'abracadabra',
     'Tyrique_Dalton': 'abracadabra',
     'Rahima_Young': 'abracadabra'
 };
+
 
 function authenticateUser(authHeader) {
     if (!authHeader || !authHeader.startsWith('Basic ')) {
@@ -25,10 +21,12 @@ function authenticateUser(authHeader) {
     return AUTHORIZED_USERS[username] === password;
 }
 
+const guestsDir = process.argv[2] ? path.join(process.argv[2], 'guests') : path.join(process.cwd(), 'guests');
+
+
 const server = http.createServer((req, res) => {
 
     res.setHeader('Content-Type', 'application/json');
-
 
     if (req.method !== 'POST') {
         res.writeHead(405);
@@ -36,14 +34,12 @@ const server = http.createServer((req, res) => {
         return;
     }
 
-
     const authHeader = req.headers.authorization;
     if (!authenticateUser(authHeader)) {
         res.writeHead(401);
         res.end('Authorization Required');
         return;
     }
-
 
     let body = '';
     req.on('data', chunk => {
@@ -55,19 +51,18 @@ const server = http.createServer((req, res) => {
 
             const guestData = JSON.parse(body);
 
-
             const guestName = req.url.slice(1);
 
-
-            if (!fs.existsSync('guests')) {
-                fs.mkdirSync('guests');
+            if (!fs.existsSync(guestsDir)) {
+                fs.mkdirSync(guestsDir, { recursive: true });
             }
 
-            const filePath = path.join('guests', `${guestName}.json`);
+
+            const filePath = path.join(guestsDir, `${guestName}.json`);
             fs.writeFileSync(filePath, JSON.stringify(guestData, null, 2));
 
             res.writeHead(200);
-            res.end(JSON.stringify(guestData, null, 2));
+            res.end(JSON.stringify(guestData));
         } catch (error) {
             res.writeHead(400);
             res.end(JSON.stringify({ error: 'Invalid JSON data' }));
@@ -75,7 +70,10 @@ const server = http.createServer((req, res) => {
     });
 });
 
+
 const PORT = 5000;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
+
+export default server;
